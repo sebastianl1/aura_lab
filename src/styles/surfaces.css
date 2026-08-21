@@ -813,9 +813,8 @@ input[type='range']::-moz-range-thumb {
 
 @media (min-width: 769px) {
   .lab-hero {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: 1rem 1.5rem;
-    padding: 2rem 1.2rem 2rem 2.2rem;
+    grid-template-columns: 1.3fr 1fr;
+    padding: 2rem 2.2rem;
     margin: 0.7rem 1rem 0.5rem;
   }
 }
@@ -898,7 +897,6 @@ input[type='range']::-moz-range-thumb {
   position: relative;
   min-height: 200px;
   display: none;
-  overflow: hidden;
 }
 
 @media (min-width: 769px) {
@@ -909,29 +907,20 @@ input[type='range']::-moz-range-thumb {
   }
 }
 
-/* Golden girador (φ) hero.
-   TAMAÑO: edita las dos variables (píxeles fijos = robusto).
-   POSICIÓN dentro de su columna: justify-content de .lab-hero-visual
-   (center | flex-start = a la izquierda | flex-end = a la derecha). */
-:root {
-  --hero-fig-w: 540px;
-  --hero-fig-h: 540px;
-}
+/* Golden girador (φ) hero */
 #hero-phi3d {
-  flex: 0 0 auto;
-  width: var(--hero-fig-w);
-  height: var(--hero-fig-h);
-  max-width: 100%;
+  width: 340px;
+  height: 340px;
+  max-width: 80%;
   position: relative;
 }
 #hero-phi3d canvas {
   display: block;
 }
 #hero-spiral {
-  flex: 0 0 auto;
-  width: var(--hero-fig-w);
-  height: var(--hero-fig-h);
-  max-width: 100%;
+  width: 340px;
+  height: 340px;
+  max-width: 80%;
   position: relative;
   opacity: 0.75;
   filter: drop-shadow(0 0 22px rgba(250, 204, 21, 0.18));

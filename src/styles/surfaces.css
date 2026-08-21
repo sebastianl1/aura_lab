@@ -907,25 +907,33 @@ input[type='range']::-moz-range-thumb {
   }
 }
 
-/* Golden girador (φ) hero — fills the wide right column */
+/* Golden girador (φ) hero — fixed pixels so flex can't collapse it */
 #hero-phi3d {
-  width: 100%;
-  max-width: 760px;
+  flex: 0 0 auto;
+  width: 600px;
   height: 540px;
-  margin-left: auto;
+  max-width: 100%;
   position: relative;
 }
 #hero-phi3d canvas {
   display: block;
 }
 #hero-spiral {
-  width: 100%;
-  max-width: 760px;
+  flex: 0 0 auto;
+  width: 600px;
   height: 540px;
-  margin-left: auto;
+  max-width: 100%;
   position: relative;
   opacity: 0.75;
   filter: drop-shadow(0 0 22px rgba(250, 204, 21, 0.18));
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  #hero-phi3d,
+  #hero-spiral {
+    width: 440px;
+    height: 480px;
+  }
 }
 
 .atom-visual {

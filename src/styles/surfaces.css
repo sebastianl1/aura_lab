@@ -813,8 +813,8 @@ input[type='range']::-moz-range-thumb {
 
 @media (min-width: 769px) {
   .lab-hero {
-    grid-template-columns: 1.3fr 1fr;
-    padding: 2rem 2.2rem;
+    grid-template-columns: 1fr 1.3fr;
+    padding: 2rem 1.2rem 2rem 2.2rem;
     margin: 0.7rem 1rem 0.5rem;
   }
 }
@@ -903,27 +903,35 @@ input[type='range']::-moz-range-thumb {
   .lab-hero-visual {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
   }
 }
 
-/* Golden girador (φ) hero */
+/* Golden girador (φ) hero — wide, right-aligned, fixed pixel size */
 #hero-phi3d {
-  width: 340px;
-  height: 340px;
-  max-width: 80%;
+  width: 100%;
+  max-width: 620px;
+  height: 480px;
   position: relative;
 }
 #hero-phi3d canvas {
   display: block;
 }
 #hero-spiral {
-  width: 340px;
-  height: 340px;
-  max-width: 80%;
+  width: 100%;
+  max-width: 620px;
+  height: 480px;
   position: relative;
   opacity: 0.75;
   filter: drop-shadow(0 0 22px rgba(250, 204, 21, 0.18));
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  #hero-phi3d,
+  #hero-spiral {
+    max-width: 420px;
+    height: 380px;
+  }
 }
 
 .atom-visual {

@@ -813,8 +813,9 @@ input[type='range']::-moz-range-thumb {
 
 @media (min-width: 769px) {
   .lab-hero {
-    grid-template-columns: 1fr 1.5fr;
-    padding: 2rem 1rem 2rem 2.2rem;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem 1.5rem;
+    padding: 2rem 1.2rem 2rem 2.2rem;
     margin: 0.7rem 1rem 0.5rem;
   }
 }
@@ -907,12 +908,12 @@ input[type='range']::-moz-range-thumb {
   }
 }
 
-/* Golden girador (φ) hero — fixed pixels so flex can't collapse it */
+/* Golden girador (φ) hero — fills its half of the hero, right side */
 #hero-phi3d {
   flex: 0 0 auto;
-  width: 600px;
+  width: 100%;
+  max-width: 800px;
   height: 540px;
-  max-width: 100%;
   position: relative;
 }
 #hero-phi3d canvas {
@@ -920,20 +921,12 @@ input[type='range']::-moz-range-thumb {
 }
 #hero-spiral {
   flex: 0 0 auto;
-  width: 600px;
+  width: 100%;
+  max-width: 800px;
   height: 540px;
-  max-width: 100%;
   position: relative;
   opacity: 0.75;
   filter: drop-shadow(0 0 22px rgba(250, 204, 21, 0.18));
-}
-
-@media (min-width: 769px) and (max-width: 1024px) {
-  #hero-phi3d,
-  #hero-spiral {
-    width: 440px;
-    height: 480px;
-  }
 }
 
 .atom-visual {

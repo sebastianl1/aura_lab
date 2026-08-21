@@ -4,8 +4,8 @@ import { GUIDED_EXERCISES } from '../math/guidedExercises.js';
 export class GuidedExercisesPanel {
   private modal: HTMLElement;
   private backdrop: HTMLElement;
-  private getCurrentR: () => number;
-  private onSelectModelAndR: (modelId: string, targetR: number) => void;
+  private getCurrentN: () => number;
+  private onSelectStyleAndN: (styleId: string, targetN: number) => void;
 
   private currentExId = 'ex1';
   private titleEl: HTMLElement | null;
@@ -22,13 +22,13 @@ export class GuidedExercisesPanel {
   constructor(
     modalElement: HTMLElement,
     backdropElement: HTMLElement,
-    getCurrentR: () => number,
-    onSelectModelAndR: (modelId: string, targetR: number) => void,
+    getCurrentN: () => number,
+    onSelectStyleAndN: (styleId: string, targetN: number) => void,
   ) {
     this.modal = modalElement;
     this.backdrop = backdropElement;
-    this.getCurrentR = getCurrentR;
-    this.onSelectModelAndR = onSelectModelAndR;
+    this.getCurrentN = getCurrentN;
+    this.onSelectStyleAndN = onSelectStyleAndN;
 
     this.titleEl = document.getElementById('ex-title');
     this.descEl = document.getElementById('ex-desc');
@@ -60,12 +60,12 @@ export class GuidedExercisesPanel {
     this.navBtns.forEach((btn) => {
       btn.addEventListener('click', (e) => {
         const target = e.target as HTMLElement;
-        const exId = target.dataset.ex;
+        const exId = btn.dataset.ex ?? target.dataset.ex;
         if (exId) this.selectExercise(exId);
       });
     });
 
-    this.btnVerify?.addEventListener('click', () => this.verifyCurrentR());
+    this.btnVerify?.addEventListener('click', () => this.verifyCurrentN());
   }
 
   private selectExercise(exId: string): void {
@@ -79,9 +79,9 @@ export class GuidedExercisesPanel {
     if (this.titleEl) this.titleEl.textContent = exData.title;
     if (this.descEl) this.descEl.textContent = exData.description;
     if (this.instructionEl) this.instructionEl.textContent = exData.instruction;
-    if (this.targetLabelEl) this.targetLabelEl.textContent = exData.targetR.toFixed(4);
+    if (this.targetLabelEl) this.targetLabelEl.textContent = String(exData.targetN);
 
-    this.updateCurrentRDisplay();
+    this.updateCurrentNDisplay();
     if (this.feedbackEl) {
       this.feedbackEl.textContent = '';
       this.feedbackEl.style.display = 'none';
@@ -99,29 +99,26 @@ export class GuidedExercisesPanel {
       });
     }
 
-    if (exData.modelId) {
-      this.onSelectModelAndR(exData.modelId, exData.targetR);
-    }
+    this.onSelectStyleAndN(exData.styleId, exData.targetN);
   }
 
-  updateCurrentRDisplay(): void {
-    const currentR = this.getCurrentR();
-    if (this.currentLabelEl) this.currentLabelEl.textContent = currentR.toFixed(4);
+  updateCurrentNDisplay(): void {
+    if (this.currentLabelEl) this.currentLabelEl.textContent = String(this.getCurrentN());
   }
 
-  private verifyCurrentR(): void {
+  private verifyCurrentN(): void {
     const exData = GUIDED_EXERCISES.find((e) => e.id === this.currentExId);
     if (!exData || !this.feedbackEl) return;
 
-    const currentR = this.getCurrentR();
-    const diff = Math.abs(currentR - exData.targetR);
+    const currentN = this.getCurrentN();
+    const diff = Math.abs(currentN - exData.targetN);
 
     this.feedbackEl.style.display = 'block';
     if (diff <= exData.tolerance) {
-      this.feedbackEl.textContent = `✅ ¡Excelente! r = ${currentR.toFixed(4)} está dentro del margen objetivo.`;
+      this.feedbackEl.textContent = `✅ ¡Excelente! n = ${currentN} está dentro del margen objetivo.`;
       this.feedbackEl.style.color = 'var(--accent-green)';
     } else {
-      this.feedbackEl.textContent = `❌ r = ${currentR.toFixed(4)} todavía dista de ${exData.targetR.toFixed(4)}. Pista: ${exData.hint}`;
+      this.feedbackEl.textContent = `❌ n = ${currentN} todavía dista de ${exData.targetN}. Pista: ${exData.hint}`;
       this.feedbackEl.style.color = 'var(--accent-rose)';
     }
   }

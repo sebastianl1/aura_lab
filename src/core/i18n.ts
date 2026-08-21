@@ -11,18 +11,17 @@ const es: Dict = {
   'tab.recursos': 'Recursos',
 
   // Cabecera
-  'header.model': 'Modelo Matemático:',
-  'header.degree': 'Grado k:',
+  'header.model': 'Estilo de Espiral:',
   'header.audio': 'Sonificar',
   'header.audio.playing': 'Pausar Sonido',
   'header.exercises': 'Ejercicios',
   'header.theory': 'Teoría & Proporción Áurea',
 
   // Barra de control
-  'ctrl.r': 'Parámetro r:',
-  'ctrl.iso': 'Isomorfismo:',
+  'ctrl.n': 'Términos (n):',
+  'ctrl.iso': 'Fibonacci ↔ φ:',
   'ctrl.palette': 'Paleta de Color:',
-  'ctrl.lyapunov': 'Convergencia (λ)',
+  'ctrl.phi': 'Mostrar φ',
   'ctrl.reset': 'Reiniciar Vistas',
   'ctrl.soundMode': 'Sonido:',
   'ctrl.mode.scale': 'Escala pentatónica',
@@ -44,42 +43,42 @@ const es: Dict = {
   'sound.preset.serenade': 'Serenata (Debussy)',
 
   // Banner teórico
-  'banner.equation': 'Ecuación Activa:',
-  'banner.derivative': "Derivada f'(x):",
+  'banner.equation': 'Término Activo:',
+  'banner.derivative': 'Razón F(n)/F(n−1):',
   'banner.principles':
-    '💡 Principios: 1. La proporción áurea emerge en toda órbita. | 2. La Espiral Áurea es un "atlas" de órbitas cuadráticas.',
+    '💡 Principios: 1. La naturaleza dispone sus primordios con el ángulo áureo (137.5°). | 2. Cada par consecutivo de Fibonacci se acerca un paso a φ.',
 
   // Títulos de panel
-  'panel.bifurcation': 'Árbol de Fibonacci HD (r vs x)',
-  'panel.bifurcation.sub': 'Arrastra la línea vertical para explorar el parámetro r',
-  'panel.mandelbrot': 'Espiral Áurea & Atlas φ (c ∈ [-2.0, 0.25])',
-  'panel.mandelbrot.sub': 'Haz clic para seleccionar c o usa la rueda para Zoom',
-  'panel.phasespace': 'Espacio de Fases Tridimensional 3D (xₙ, xₙ₊₁, xₙ₊₂)',
-  'panel.phasespace.sub': 'Arrastra con el mouse para rotar en 3D',
-  'panel.inspector': 'Inspector Matemático & Convergencia de la Órbita',
-  'panel.cobweb': 'Diagrama de Telaraña (Cobweb Plot: xₙ₊₁ = f(xₙ))',
-  'panel.cobweb.sub': 'Arrastra la condición inicial x₀ en la base',
-  'panel.timeseries': 'Serie Temporal xₙ',
-  'panel.timeseries.sub': 'Evolución de la órbita frente a n',
-  'panel.histogram': 'Histograma de la Órbita',
-  'panel.histogram.sub': 'Distribución de valores visitados por la órbita',
+  'panel.sequence': 'Sucesión de Fibonacci (F(n) en escala log)',
+  'panel.sequence.sub': 'Cada término crece con la razón φ',
+  'panel.phyllotaxis': 'Filotaxis — Ángulo Áureo 137.508°',
+  'panel.phyllotaxis.sub': 'Haz clic para desplazar las semillas o usa la rueda para Zoom',
+  'panel.sphere': 'Esfera de Fibonacci 3D (distribución φ)',
+  'panel.sphere.sub': 'Arrastra con el mouse para rotar en 3D',
+  'panel.inspector': 'Inspector Áureo & Métricas de Convergencia',
+  'panel.ratio': 'Convergencia de la Razón → φ (F(n)/F(n−1))',
+  'panel.ratio.sub': 'La línea roja marca la asíntota φ = 1.618…',
+  'panel.pentagram': 'Pentágono & Pentagrama — Triángulo Áureo 36° / 72°',
+  'panel.pentagram.sub': 'Arrastra para rotar la estrella y observar la proporción',
+  'panel.goldenrect': 'Rectángulo Áureo & Teselación 1 : φ',
+  'panel.goldenrect.sub': 'Muévete por la recursión del rectángulo áureo',
 
   // Ingeniería
-  'eng.title': '🏭 Aplicaciones Reales en Ingeniería',
-  'eng.subtitle': 'Casos prácticos de dinámicas no lineales en sistemas reales.',
-  'eng.graph': 'Forma de Onda Temporal / Respuesta de Fases HD',
-  'eng.tab.electrical': '⚡ Eléctrica',
-  'eng.tab.process': '🧪 Procesos',
-  'eng.tab.mechanical': '⚙️ Mecánica',
-  'eng.tab.environmental': '🌱 Ambiental',
-  'eng.tab.computer': '💻 Informática',
-  'eng.tab.telecom': '📡 Telecom',
+  'eng.title': '🏭 Aplicaciones Reales de la Proporción Áurea',
+  'eng.subtitle': 'Casos prácticos de φ en arquitectura, biología, finanzas, música y tecnología.',
+  'eng.graph': 'Forma de Onda / Representación φ HD',
+  'eng.tab.architecture': '🏛️ Arquitectura',
+  'eng.tab.biology': '🌻 Biología',
+  'eng.tab.nature': '🐚 Naturaleza',
+  'eng.tab.markets': '📈 Mercados',
+  'eng.tab.music': '🎼 Música',
+  'eng.tab.telecom': '📡 Telecom & Diseño',
 
   // Idioma
   'lang.label': 'Idioma:',
 
   // Aprende
-  'learn.title': 'Aprende la Proporción Áurea',
+  'learn.title': 'Aprende la Sucesión Áurea',
   'learn.subtitle':
     'Módulos guiados con teoría, ecuaciones y la espiral áurea como hilo conductor.',
   'learn.modules': 'Módulos',
@@ -97,13 +96,13 @@ const es: Dict = {
   // Videos
   'videos.title': 'Videolecciones',
   'videos.subtitle':
-    'Próximamente: videolecciones guiadas paso a paso. Por ahora puedes explorar los módulos interactivos.',
+    'Videos curados sobre Fibonacci, φ y filotaxis. Explorables también con los módulos interactivos.',
   'videos.comingSoon': 'Videos en preparación',
 
   // Recursos
   'resources.title': 'Recursos y Bibliografía',
   'resources.subtitle':
-    'Fuentes académicas y referencias para profundizar en Fibonacci, la proporción áurea y la dinámica de órbitas.',
+    'Fuentes académicas y referencias para profundizar en Fibonacci, la proporción áurea y la filotaxis.',
 };
 
 const en: Dict = {
@@ -113,17 +112,16 @@ const en: Dict = {
   'tab.videos': 'Videos',
   'tab.recursos': 'Resources',
 
-  'header.model': 'Mathematical Model:',
-  'header.degree': 'Degree k:',
+  'header.model': 'Spiral Style:',
   'header.audio': 'Sonify',
   'header.audio.playing': 'Pause Sound',
   'header.exercises': 'Exercises',
   'header.theory': 'Theory & Golden Ratio',
 
-  'ctrl.r': 'Parameter r:',
-  'ctrl.iso': 'Isomorphism:',
+  'ctrl.n': 'Terms (n):',
+  'ctrl.iso': 'Fibonacci ↔ φ:',
   'ctrl.palette': 'Color Palette:',
-  'ctrl.lyapunov': 'Convergence (λ)',
+  'ctrl.phi': 'Show φ',
   'ctrl.reset': 'Reset Views',
   'ctrl.soundMode': 'Sound:',
   'ctrl.mode.scale': 'Pentatonic scale',
@@ -144,38 +142,38 @@ const en: Dict = {
   'sound.preset.classic': 'Classical (Beethoven)',
   'sound.preset.serenade': 'Serenade (Debussy)',
 
-  'banner.equation': 'Active Equation:',
-  'banner.derivative': "Derivative f'(x):",
+  'banner.equation': 'Active Term:',
+  'banner.derivative': 'Ratio F(n)/F(n−1):',
   'banner.principles':
-    '💡 Principles: 1. The golden ratio emerges in every orbit. | 2. The Golden Spiral is an "atlas" of quadratic orbits.',
+    '💡 Principles: 1. Nature arranges its primordia with the golden angle (137.5°). | 2. Every consecutive Fibonacci pair steps closer to φ.',
 
-  'panel.bifurcation': 'HD Fibonacci Tree (r vs x)',
-  'panel.bifurcation.sub': 'Drag the vertical line to explore parameter r',
-  'panel.mandelbrot': 'Golden Spiral & φ Atlas (c ∈ [-2.0, 0.25])',
-  'panel.mandelbrot.sub': 'Click to select c or use the wheel to Zoom',
-  'panel.phasespace': '3D Phase Space (xₙ, xₙ₊₁, xₙ₊₂)',
-  'panel.phasespace.sub': 'Drag with the mouse to rotate in 3D',
-  'panel.inspector': 'Mathematical Inspector & Orbit Convergence',
-  'panel.cobweb': 'Cobweb Plot (xₙ₊₁ = f(xₙ))',
-  'panel.cobweb.sub': 'Drag the initial condition x₀ along the base',
-  'panel.timeseries': 'Time Series xₙ',
-  'panel.timeseries.sub': 'Orbit evolution vs n',
-  'panel.histogram': 'Orbit Histogram',
-  'panel.histogram.sub': 'Distribution of values visited by the orbit',
+  'panel.sequence': 'Fibonacci Sequence (F(n), log scale)',
+  'panel.sequence.sub': 'Each term grows with the ratio φ',
+  'panel.phyllotaxis': 'Phyllotaxis — Golden Angle 137.508°',
+  'panel.phyllotaxis.sub': 'Click to pan the seeds or use the wheel to Zoom',
+  'panel.sphere': '3D Fibonacci Sphere (φ distribution)',
+  'panel.sphere.sub': 'Drag with the mouse to rotate in 3D',
+  'panel.inspector': 'Golden Inspector & Convergence Metrics',
+  'panel.ratio': 'Ratio Convergence → φ (F(n)/F(n−1))',
+  'panel.ratio.sub': 'The red line marks the φ = 1.618… asymptote',
+  'panel.pentagram': 'Pentagon & Pentagram — Golden Triangle 36° / 72°',
+  'panel.pentagram.sub': 'Drag to rotate the star and observe the proportion',
+  'panel.goldenrect': 'Golden Rectangle & 1 : φ Tiling',
+  'panel.goldenrect.sub': 'Move through the golden rectangle recursion',
 
-  'eng.title': '🏭 Real Engineering Applications',
-  'eng.subtitle': 'Practical cases of nonlinear dynamics in real systems.',
-  'eng.graph': 'Time Waveform / HD Phase Response',
-  'eng.tab.electrical': '⚡ Electrical',
-  'eng.tab.process': '🧪 Process',
-  'eng.tab.mechanical': '⚙️ Mechanical',
-  'eng.tab.environmental': '🌱 Environmental',
-  'eng.tab.computer': '💻 Computer',
-  'eng.tab.telecom': '📡 Telecom',
+  'eng.title': '🏭 Real Applications of the Golden Ratio',
+  'eng.subtitle': 'Practical cases of φ in architecture, biology, finance, music and technology.',
+  'eng.graph': 'Waveform / HD φ Representation',
+  'eng.tab.architecture': '🏛️ Architecture',
+  'eng.tab.biology': '🌻 Biology',
+  'eng.tab.nature': '🐚 Nature',
+  'eng.tab.markets': '📈 Markets',
+  'eng.tab.music': '🎼 Music',
+  'eng.tab.telecom': '📡 Telecom & Design',
 
   'lang.label': 'Language:',
 
-  'learn.title': 'Learn the Golden Ratio',
+  'learn.title': 'Learn the Golden Sequence',
   'learn.subtitle':
     'Guided modules with theory, equations and the golden spiral as guiding thread.',
   'learn.modules': 'Modules',
@@ -192,12 +190,12 @@ const en: Dict = {
 
   'videos.title': 'Video Lessons',
   'videos.subtitle':
-    'Coming soon: guided step-by-step video lessons. For now, explore the interactive modules.',
+    'Curated videos about Fibonacci, φ and phyllotaxis. Also explorable with the interactive modules.',
   'videos.comingSoon': 'Videos in preparation',
 
   'resources.title': 'Resources & Bibliography',
   'resources.subtitle':
-    'Academic sources and references about Fibonacci, the golden ratio and orbit dynamics.',
+    'Academic sources and references to go deeper into Fibonacci, the golden ratio and phyllotaxis.',
 };
 
 class I18n {

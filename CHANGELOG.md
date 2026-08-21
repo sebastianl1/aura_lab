@@ -6,6 +6,24 @@ y el proyecto usa [Conventional Commits](https://www.conventionalcommits.org/).
 
 ## [En desarrollo]
 
+### Reescritura — Laboratorio centrado en Fibonacci & φ
+- **Motor matemático reemplazado**: se retira el motor de caos (logístico,
+  Mandelbrot, Lyapunov, Feigenbaum) y se integra un núcleo Fibonacci puro
+  (`fibonacci.ts`): sucesión, Binet, Zeckendorf, Lucas, ángulo áureo y
+  filotaxis. 15 tests nuevos.
+- **7 paneles nuevos**: Sucesión F(n) (escala log), Filotaxis WebGL 137.508°
+  con worker de fallback, Esfera de Fibonacci 3D, Inspector Áureo,
+  Convergencia → φ, Pentágono & Pentagrama, Rectángulo Áureo 1:φ.
+- **Hero Girador Áureo 3D** (Three.js): icosaedro dorado + partículas en
+  esfera de Fibonacci + espiral logarítmica; fallback 2D en espiral.
+- **Sonifier φ**: los ratios F(n)/F(n−1) convergen a un tono único.
+- **Pestañas reescritas**: Aprende (6 módulos bilingües), Ejemplos (15),
+  Videos (6 embeds verificados), Recursos (bibliografía φ).
+- **Aplicaciones reales de φ**: arquitectura, biología, naturaleza, mercados,
+  música y telecom.
+- **docs**: README, CONTEXTO y CHANGELOG reestructurados; SEO/schema y 404
+  retematizados.
+
 ### Restauración — App completa + tema Fibonacci
 - Se restaura la app completa (componentes, modelos, workers, contenido) con
   estructura idéntica al proyecto de referencia.

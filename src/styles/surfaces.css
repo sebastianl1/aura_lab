@@ -561,6 +561,57 @@ input[type='range']::-moz-range-thumb {
   line-height: 1.45;
 }
 
+/* Golden inspector grid (replaces metric layout) */
+.inspector-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 0.5rem;
+  padding: 0.6rem 0.7rem;
+}
+.inspector-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  background: rgba(15, 10, 8, 0.5);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.55rem 0.65rem;
+}
+.inspector-label {
+  font-size: 0.58rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+}
+.inspector-value {
+  font-size: 0.82rem;
+  font-family: var(--font-mono);
+  color: var(--text);
+  word-break: break-all;
+}
+.inspector-value.gold {
+  color: var(--gold);
+}
+.inspector-caption {
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  line-height: 1.35;
+}
+.inspector-formulae {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  padding: 0.4rem 0.7rem 0.7rem;
+}
+.inspector-latex {
+  background: rgba(15, 10, 8, 0.55);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.5rem 0.7rem;
+  font-size: 1.05rem;
+}
+
 /* ---------- Modals ---------- */
 .modal-backdrop {
   position: fixed;
@@ -839,11 +890,21 @@ input[type='range']::-moz-range-thumb {
   }
 }
 
-/* Golden spiral (φ) hero canvas */
+/* Golden girador (φ) hero */
+#hero-phi3d {
+  width: 340px;
+  height: 340px;
+  max-width: 80%;
+  position: relative;
+}
+#hero-phi3d canvas {
+  display: block;
+}
 #hero-spiral {
   width: 340px;
   height: 340px;
   max-width: 80%;
+  position: relative;
   opacity: 0.75;
   filter: drop-shadow(0 0 22px rgba(250, 204, 21, 0.18));
 }

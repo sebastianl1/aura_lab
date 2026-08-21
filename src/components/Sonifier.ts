@@ -1,4 +1,4 @@
-import type { BifurcationModel } from '../math/models/BaseModel.js';
+import { PHI, ratio } from '../math/fibonacci.js';
 
 // ─── Musical scales ──────────────────────────────────────────────────
 
@@ -21,21 +21,21 @@ const NOTE_NAMES = ['A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', '
 // ─── Harmonic model (piano-like) ─────────────────────────────────────
 
 interface HarmonicSpec {
-  mult: number; // frequency multiplier
-  gain: number; // relative amplitude
-  decay: number; // decay time in seconds
-  detuneCents: number; // slight inharmonicity (+2 cents for fundamental)
+  mult: number;
+  gain: number;
+  decay: number;
+  detuneCents: number;
 }
 
 const HARMONICS: HarmonicSpec[] = [
-  { mult: 1, gain: 1.0, decay: 2.0, detuneCents: 2 }, // fundamental (+2 cents inharmonicity)
+  { mult: 1, gain: 1.0, decay: 2.0, detuneCents: 2 },
   { mult: 2, gain: 0.5, decay: 1.2, detuneCents: 0 },
   { mult: 3, gain: 0.2, decay: 0.8, detuneCents: 0 },
   { mult: 4, gain: 0.1, decay: 0.5, detuneCents: 0 },
   { mult: 5, gain: 0.04, decay: 0.3, detuneCents: 0 },
 ];
 
-const ATTACK_NOISE_DURATION = 0.005; // 5ms hammer transient
+const ATTACK_NOISE_DURATION = 0.005;
 const ATTACK_NOISE_GAIN = 0.15;
 
 // ─── Style presets ───────────────────────────────────────────────────
@@ -47,7 +47,7 @@ export interface StylePreset {
   tempoMs: number;
   dynamics: boolean;
   subGain: number;
-  warmth: number; // 0-1: how many harmonics are active (0 = sparse, 1 = full)
+  warmth: number;
 }
 
 const PRESETS: StylePreset[] = [
@@ -80,20 +80,21 @@ const PRESETS: StylePreset[] = [
   },
 ];
 
-// ─── Dynamics by Lyapunov ────────────────────────────────────────────
+// ─── Dynamics by distance to φ ───────────────────────────────────────
 
-function dynamicsFromLyapunov(lambda: number): number {
-  if (lambda < -0.5) return 0.03;
-  if (lambda < 0) return 0.05;
-  if (lambda < 0.05) return 0.07;
-  return 0.1;
+/** Converges to φ → notes stabilise on a single pitch (consonant). */
+function dynamicsFromError(err: number): number {
+  if (err > 0.3) return 0.1; // far from φ — loud, rich
+  if (err > 0.1) return 0.07;
+  if (err > 0.03) return 0.05;
+  return 0.03; // essentially at φ — quiet, still
 }
 
-function dynamicsLabel(lambda: number): string {
-  if (lambda < -0.5) return 'p';
-  if (lambda < 0) return 'mp';
-  if (lambda < 0.05) return 'mf';
-  return 'f';
+function dynamicsLabel(err: number): string {
+  if (err > 0.3) return 'f';
+  if (err > 0.1) return 'mf';
+  if (err > 0.03) return 'mp';
+  return 'p';
 }
 
 // ─── Sonifier class ──────────────────────────────────────────────────
@@ -101,9 +102,9 @@ function dynamicsLabel(lambda: number): string {
 export type MusicalMode = keyof typeof SCALE_MAP;
 
 export class Sonifier {
-  private model: BifurcationModel | null = null;
-  private r = 3.0;
-  private orbit: number[] = [];
+  private n = 233;
+  private ratios: number[] = []; // F(k)/F(k-1) for k = 2..n
+  private stepIndex = 0;
 
   // Audio nodes — created once in initAudio()
   private audioCtx: AudioContext | null = null;
@@ -116,12 +117,11 @@ export class Sonifier {
   private subGain: GainNode | null = null;
 
   // State
-  private stepIndex = 0;
   private timerId: number | null = null;
   private _musicalMode: MusicalMode = 'pentatonicMinor';
   private _dynamicsOn = true;
   private _subWarmth = 0.02;
-  private _warmth = 0.6; // which harmonics are active (0 = only fundamental, 1 = all 5)
+  private _warmth = 0.6;
 
   // Scale cache
   private builtScale: number[] = [];
@@ -169,14 +169,17 @@ export class Sonifier {
 
   // ── Public API ───────────────────────────────────────────────────
 
-  setModel(model: BifurcationModel): void {
-    this.model = model;
-    if (this.isPlaying) this.setR(this.r);
+  setN(n: number): void {
+    this.n = Math.max(3, n);
+    this.rebuildRatios();
   }
 
-  setR(r: number): void {
-    this.r = r;
-    if (this.model) this.orbit = Array.from(this.model.getOrbit(r, 400, 128));
+  private rebuildRatios(): void {
+    const out: number[] = [];
+    for (let k = 2; k <= this.n; k++) {
+      out.push(ratio(k));
+    }
+    this.ratios = out;
   }
 
   setTempo(ms: number): void {
@@ -215,7 +218,7 @@ export class Sonifier {
     this.initAudio();
     this.isPlaying = true;
     this.buildScaleCache();
-    this.setR(this.r);
+    this.rebuildRatios();
     if (this.masterGain && this.audioCtx) {
       this.masterGain.gain.setTargetAtTime(0.08, this.audioCtx.currentTime, 0.03);
     }
@@ -248,17 +251,14 @@ export class Sonifier {
     if (!Ctx) return;
     this.audioCtx = new Ctx();
 
-    // Master gain
     this.masterGain = this.audioCtx.createGain();
     this.masterGain.gain.value = 0;
     this.masterGain.connect(this.audioCtx.destination);
 
-    // Create 5 harmonic oscillators with individual gain nodes
     for (let i = 0; i < HARMONICS.length; i++) {
       const spec = HARMONICS[i]!;
       const osc = this.audioCtx.createOscillator();
       osc.type = 'sine';
-      // Inharmonicity: slight detune on fundamental (+2 cents ≈ 1.0116x)
       if (spec.detuneCents !== 0) osc.detune.value = spec.detuneCents;
 
       const gain = this.audioCtx.createGain();
@@ -271,7 +271,6 @@ export class Sonifier {
       this.harmonicGains.push(gain);
     }
 
-    // Noise source (audio buffer with white noise, 50ms loop)
     const bufferSize = Math.floor(this.audioCtx.sampleRate * 0.05);
     const noiseBuffer = this.audioCtx.createBuffer(1, bufferSize, this.audioCtx.sampleRate);
     const data = noiseBuffer.getChannelData(0);
@@ -280,7 +279,6 @@ export class Sonifier {
     this.noiseGain.gain.value = 0;
     this.noiseGain.connect(this.masterGain);
 
-    // Sub oscillator (triangle, octave below, very quiet)
     this.subGain = this.audioCtx.createGain();
     this.subGain.gain.value = 0;
     this.subOsc = this.audioCtx.createOscillator();
@@ -302,10 +300,6 @@ export class Sonifier {
     const decayTime = 0.05;
     const sustainLevel = 0.65;
 
-    // --- Lead harmonic (fundamental) ---
-    // On each note, we create fresh gain envelope for the lead voice.
-    // But for performance, we reuse oscillators and just ramp gain.
-
     for (let i = 0; i < HARMONICS.length; i++) {
       const spec = HARMONICS[i]!;
       const activeGain = spec.gain * dynGain * this._warmth;
@@ -314,17 +308,13 @@ export class Sonifier {
 
       osc.frequency.setValueAtTime(freq * spec.mult, now);
 
-      // ADSR-like envelope per harmonic
       harmonicGain.gain.cancelScheduledValues(now);
       harmonicGain.gain.setValueAtTime(0.0, now);
-      // Attack
       harmonicGain.gain.linearRampToValueAtTime(activeGain * 1.2, now + attackTime);
-      // Decay to sustain
       harmonicGain.gain.exponentialRampToValueAtTime(
         Math.max(0.0001, activeGain * sustainLevel * (1 - i * 0.18)),
         now + decayTime,
       );
-      // Release towards zero (exponential tail)
       harmonicGain.gain.exponentialRampToValueAtTime(
         Math.max(0.0001, activeGain * 0.05),
         now + Math.min(noteLen, spec.decay),
@@ -332,13 +322,11 @@ export class Sonifier {
       harmonicGain.gain.linearRampToValueAtTime(0.0, now + noteLen);
     }
 
-    // --- Attack transient (noise burst: hammer hitting the string) ---
     if (this.noiseGain && this.audioCtx) {
       this.noiseGain.gain.cancelScheduledValues(now);
       this.noiseGain.gain.setValueAtTime(0.0, now);
       this.noiseGain.gain.linearRampToValueAtTime(ATTACK_NOISE_GAIN * dynGain, now + 0.001);
       this.noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + ATTACK_NOISE_DURATION);
-      // Replay noise buffer
       this.noiseNode?.stop(now);
       this.noiseNode = this.audioCtx.createBufferSource();
       const bufSize = Math.floor(this.audioCtx.sampleRate * 0.05);
@@ -350,7 +338,6 @@ export class Sonifier {
       this.noiseNode.start(now);
     }
 
-    // --- Sub voice ---
     if (this.subOsc) this.subOsc.frequency.setValueAtTime(freq / 2, now);
     if (this.subGain) {
       this.subGain.gain.cancelScheduledValues(now);
@@ -359,17 +346,16 @@ export class Sonifier {
     }
   }
 
-  // ── Tick: map orbit → note ───────────────────────────────────────
+  // ── Tick: map ratio → note ───────────────────────────────────────
 
   private tick(): void {
-    if (!this.isPlaying || !this.model) return;
+    if (!this.isPlaying) return;
 
-    const rawVal = this.orbit[this.stepIndex % this.orbit.length] ?? 0;
+    const rawVal = this.ratios[this.stepIndex % this.ratios.length] ?? PHI;
     this.stepIndex++;
 
-    const xMin = this.model.xRange.min;
-    const xMax = this.model.xRange.max;
-    const norm = Math.max(0, Math.min(1, (rawVal - xMin) / (xMax - xMin)));
+    // Ratios live in [1, 2]; φ ≈ 1.618 → norm ≈ 0.618 (a fixed pitch).
+    const norm = Math.max(0, Math.min(1, (rawVal - 1) / (2 - 1)));
 
     let freq: number;
     let noteName: string;
@@ -389,17 +375,15 @@ export class Sonifier {
       noteName = `${freq.toFixed(0)} Hz`;
     }
 
-    // Dynamics from Lyapunov
-    const lambda = this.model.computeLyapunov(this.r, 200, 100);
-    const dynGain = this._dynamicsOn ? dynamicsFromLyapunov(lambda) : 0.06;
-    this.lastDynamics = dynamicsLabel(lambda);
+    // Dynamics from distance to φ (converges to piano near φ).
+    const err = Math.abs(rawVal - PHI);
+    const dynGain = this._dynamicsOn ? dynamicsFromError(err) : 0.06;
+    this.lastDynamics = dynamicsLabel(err);
 
-    // Update indicator
     this.lastNote = noteName;
     this.lastFreq = Math.round(freq);
     this.onNotePlayed?.(`${noteName} · ${Math.round(freq)} Hz · ${this.lastDynamics}`);
 
-    // Play the note with multi-harmonic piano envelope
     this.playNote(freq, dynGain);
   }
 }

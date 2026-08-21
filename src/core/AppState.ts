@@ -1,47 +1,43 @@
 import { EventEmitter } from './EventEmitter.js';
-import type { BifurcationModel } from '../math/models/BaseModel.js';
-import { globalModelRegistry } from '../math/models/ModelRegistry.js';
+import { getSpiralStyle } from '../math/fibonacci.js';
 
 export interface AppStateEvents {
-  modelChange: BifurcationModel;
-  rChange: number;
-  lyapunovChange: boolean;
+  nChange: number;
+  styleChange: string;
+  showPhiChange: boolean;
   paletteChange: number;
   audioChange: boolean;
 }
 
+export const N_MIN = 3;
+export const N_MAX = 1000;
+export const N_DEFAULT = 233; // a Fibonacci number, in homage
+
 /**
- * Global application state. Every mutation is reflected through the typed
- * event emitter so views can coalesce a single redraw.
+ * Global application state (Fibonacci theme). Every mutation is reflected
+ * through the typed event emitter so views can coalesce a single redraw.
  */
 class AppState extends EventEmitter<AppStateEvents> {
-  private _model: BifurcationModel;
-  private _r: number;
-  private _lyapunovEnabled = true;
+  private _n = N_DEFAULT;
+  private _style = 'sunflower';
+  private _showPhi = true;
   private _palette = 0;
   private _audioEnabled = false;
 
-  constructor() {
-    super();
-    this._model = globalModelRegistry.getModel('logistic');
-    this._r = this._model.defaultR;
+  get n(): number {
+    return this._n;
   }
 
-  get model(): BifurcationModel {
-    return this._model;
+  get styleId(): string {
+    return this._style;
   }
 
-  get r(): number {
-    return this._r;
+  get style() {
+    return getSpiralStyle(this._style);
   }
 
-  /** Equivalent Mandelbrot real-axis parameter c for the current model/r. */
-  get c(): number {
-    return this._model.rToC(this._r);
-  }
-
-  get lyapunovEnabled(): boolean {
-    return this._lyapunovEnabled;
+  get showPhi(): boolean {
+    return this._showPhi;
   }
 
   get palette(): number {
@@ -52,42 +48,33 @@ class AppState extends EventEmitter<AppStateEvents> {
     return this._audioEnabled;
   }
 
-  set modelId(id: string) {
-    const newModel = globalModelRegistry.getModel(id);
-    if (newModel !== this._model) {
-      this._model = newModel;
-      this._r = newModel.clampR(this._r);
-      this.emit('modelChange', this._model);
+  set n(val: number) {
+    const clamped = Math.max(N_MIN, Math.min(N_MAX, Math.round(val)));
+    if (clamped !== this._n) {
+      this._n = clamped;
+      this.emit('nChange', this._n);
     }
   }
 
-  /** Update the polynomial degree k and refresh the active model. */
-  setPolynomialK(k: number): void {
-    globalModelRegistry.setPolynomialK(k);
-    this._model = globalModelRegistry.getModel('polynomial');
-    this._r = this._model.clampR(this._r);
-    this.emit('modelChange', this._model);
-  }
-
-  set r(val: number) {
-    const clamped = this._model.clampR(val);
-    if (Math.abs(clamped - this._r) > 1e-10) {
-      this._r = clamped;
-      this.emit('rChange', this._r);
+  set styleId(id: string) {
+    if (id !== this._style && getSpiralStyle(id)) {
+      this._style = id;
+      this.emit('styleChange', this._style);
     }
   }
 
-  set lyapunovEnabled(val: boolean) {
-    if (this._lyapunovEnabled !== val) {
-      this._lyapunovEnabled = val;
-      this.emit('lyapunovChange', val);
+  set showPhi(val: boolean) {
+    if (this._showPhi !== val) {
+      this._showPhi = val;
+      this.emit('showPhiChange', val);
     }
   }
 
   set palette(val: number) {
-    if (this._palette !== val) {
-      this._palette = val;
-      this.emit('paletteChange', val);
+    const clamped = Math.max(0, Math.min(3, Math.round(val)));
+    if (this._palette !== clamped) {
+      this._palette = clamped;
+      this.emit('paletteChange', clamped);
     }
   }
 

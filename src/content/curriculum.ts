@@ -1,10 +1,11 @@
-/**
- * Educational curriculum for the "Aprende" tab.
- * Every lesson is bilingual (ES/EN) and can embed LaTeX blocks, an
- * interactive demo (model + r) and a self-assessment quiz.
- */
+/** Bilingual curriculum for the Aprende tab (Fibonacci & golden ratio). */
 
 export type Lang = 'es' | 'en';
+
+export interface Block {
+  type: 'paragraph' | 'aside' | 'latex';
+  content: string;
+}
 
 export interface QuizOption {
   text: string;
@@ -17,22 +18,17 @@ export interface QuizQuestion {
   explanation: string;
 }
 
-export interface LessonBlock {
-  type: 'paragraph' | 'latex' | 'aside';
-  content: string;
-}
-
 export interface LessonDemo {
-  modelId: string;
-  r: number;
   label: string;
+  styleId: string;
+  n: number;
 }
 
 export interface Lesson {
   id: string;
   title: { es: string; en: string };
   intro: { es: string; en: string };
-  blocks: { es: LessonBlock[]; en: LessonBlock[] };
+  blocks: { es: Block[]; en: Block[] };
   keyPoints: { es: string[]; en: string[] };
   takeaway?: { es: string; en: string };
   demo?: LessonDemo;
@@ -56,1320 +52,838 @@ export interface GlossaryTerm {
 export const MODULES: Module[] = [
   {
     id: 'm1',
-    icon: '🔁',
-    title: { es: 'Fundamentos: Iteración y Mapas', en: 'Fundamentals: Iteration & Maps' },
+    icon: '🔢',
+    title: { es: 'Sucesión de Fibonacci', en: 'The Fibonacci Sequence' },
     summary: {
-      es: 'Sistemas dinámicos discretos, órbitas, puntos fijos y estabilidad.',
-      en: 'Discrete dynamical systems, orbits, fixed points and stability.',
+      es: 'Orígenes en el Liber Abaci, la regla recurrente y el crecimiento exponencial.',
+      en: 'Origins in the Liber Abaci, the recurrence rule and exponential growth.',
     },
     lessons: [
       {
         id: 'm1-l1',
-        title: { es: 'Sistemas dinámicos discretos', en: 'Discrete dynamical systems' },
+        title: { es: 'Los conejos de Fibonacci', en: "Leonardo of Pisa's rabbits" },
         intro: {
-          es: 'Un mapa es una regla que transforma cada estado en el siguiente.',
-          en: 'A map is a rule that turns each state into the next one.',
+          es: 'En 1202, Leonardo de Pisa (Fibonacci) estudió cuántas parejas de conejos nacen tras n meses.',
+          en: 'In 1202, Leonardo of Pisa (Fibonacci) asked how many rabbit pairs exist after n months.',
         },
         blocks: {
           es: [
             {
               type: 'paragraph',
               content:
-                'Un sistema dinámico discreto está definido por una función f que lleva un estado xₙ al siguiente:',
+                'Cada mes, una pareja madura engendra una nueva pareja; una pareja joven necesita un mes para madurar. Si empiezas con una pareja joven, las poblaciones mensuales son 1, 1, 2, 3, 5, 8, 13…',
             },
-            { type: 'latex', content: 'x_{n+1} = f(x_n), \\quad n = 0, 1, 2, \\ldots' },
-            {
-              type: 'paragraph',
-              content:
-                'Partiendo de una condición inicial x₀, obtenemos la órbita x₀, x₁, x₂, … Los primeros pasos suelen ser un transitorio que se descarta; lo relevante es la evolución a largo plazo, que revela el atractor del sistema.',
-            },
+            { type: 'latex', content: 'F(0)=0,\\ F(1)=1,\\ F(n)=F(n-1)+F(n-2)' },
             {
               type: 'aside',
               content:
-                'En el laboratorio, el diagrama de telaraña (cobweb) dibuja la órbita paso a paso. Arrastra x₀ en la base y observa cómo la escalera avanza.',
+                'Aunque es un modelo idealizado, marca el primer estudio matemático de crecimiento biológico en Occidente.',
             },
           ],
           en: [
             {
               type: 'paragraph',
               content:
-                'A discrete dynamical system is defined by a function f taking a state xₙ to the next one:',
+                'Each month a mature pair begets a new pair; a young pair needs one month to mature. Starting with one young pair, monthly populations read 1, 1, 2, 3, 5, 8, 13…',
             },
-            { type: 'latex', content: 'x_{n+1} = f(x_n), \\quad n = 0, 1, 2, \\ldots' },
-            {
-              type: 'paragraph',
-              content:
-                'Starting from an initial condition x₀, we obtain the orbit x₀, x₁, x₂, … The early steps are usually a transient to be discarded; what matters is the long-term evolution, which reveals the system attractor.',
-            },
+            { type: 'latex', content: 'F(0)=0,\\ F(1)=1,\\ F(n)=F(n-1)+F(n-2)' },
             {
               type: 'aside',
               content:
-                'In the laboratory, the cobweb plot draws the orbit step by step. Drag x₀ on the base and watch the staircase advance.',
+                'Though idealized, it marks the first Western mathematical study of biological growth.',
             },
           ],
         },
         keyPoints: {
           es: [
-            'Un mapa discreto genera la órbita a partir de x₀.',
-            'El transitorio se descarta; la dinámica a largo plazo define el atractor.',
+            'La sucesión nace del modelo de conejos del Liber Abaci (1202).',
+            'Cada término es la suma de los dos anteriores.',
           ],
           en: [
-            'A discrete map generates the orbit from x₀.',
-            'The transient is discarded; long-term dynamics define the attractor.',
+            'The sequence comes from the rabbit model in the Liber Abaci (1202).',
+            'Each term is the sum of the two previous ones.',
           ],
+        },
+        takeaway: {
+          es: 'Una regla de crecimiento simple puede generar una sucesión con propiedades infinitas.',
+          en: 'A simple growth rule can generate a sequence with infinite properties.',
+        },
+        quiz: {
+          question: '¿Cuál es el siguiente término de 1, 1, 2, 3, 5, 8?',
+          options: [
+            { text: '13', correct: true },
+            { text: '11', correct: false },
+            { text: '16', correct: false },
+            { text: '10', correct: false },
+          ],
+          explanation: 'F(n)=F(n−1)+F(n−2): 8 + 5 = 13.',
         },
       },
       {
         id: 'm1-l2',
-        title: { es: 'Puntos fijos y estabilidad', en: 'Fixed points and stability' },
+        title: { es: 'La regla recurrente', en: 'The recurrence rule' },
         intro: {
-          es: '¿A dónde converge la órbita? La derivada decide la estabilidad.',
-          en: 'Where does the orbit converge? The derivative decides stability.',
+          es: 'La recurrencia F(n) = F(n−1) + F(n−2) basta para generar toda la sucesión.',
+          en: 'The recurrence F(n) = F(n−1) + F(n−2) generates the whole sequence.',
         },
         blocks: {
           es: [
             {
               type: 'paragraph',
               content:
-                'Un punto fijo x* satisface f(x*) = x*. Para saber si las iteraciones cercanas convergen a él, evaluamos la pendiente de f en x*:',
+                'En el laboratorio, el panel "Sucesión" dibuja log(F(n)) frente a n. Como F(n) crece como φⁿ/√5, la gráfica logarítmica es una línea recta de pendiente ln(φ) ≈ 0.4812.',
             },
+            { type: 'latex', content: '\\log F(n) \\approx n\\log\\varphi - \\log\\sqrt{5}' },
             {
-              type: 'latex',
-              content:
-                "|f'(x^*)| < 1 \\; \\Rightarrow \\; \\text{estable} \\qquad |f'(x^*)| > 1 \\; \\Rightarrow \\; \\text{inestable}",
-            },
-            {
-              type: 'paragraph',
-              content:
-                'En el mapa logístico, el punto fijo x* = 1 − 1/r existe para r > 1 y es estable mientras |r(1 − 2x*)| < 1, es decir, mientras r < 3. Al llegar a r = 3, el punto fijo pierde estabilidad: nace una bifurcación.',
-            },
-            {
-              type: 'latex',
-              content: "x^* = 1 - \\frac{1}{r} \\qquad \\left| f'(x^*) \\right| = |2 - r|",
+              type: 'aside',
+              content: 'Una línea recta en escala logarítmica = crecimiento exponencial puro.',
             },
           ],
           en: [
             {
               type: 'paragraph',
               content:
-                'A fixed point x* satisfies f(x*) = x*. To tell whether nearby iterates converge to it, we evaluate the slope of f at x*:',
+                'In the lab, the Sequence panel plots log(F(n)) vs n. Since F(n) grows like φⁿ/√5, the log plot is a straight line of slope ln(φ) ≈ 0.4812.',
             },
+            { type: 'latex', content: '\\log F(n) \\approx n\\log\\varphi - \\log\\sqrt{5}' },
             {
-              type: 'latex',
-              content:
-                "|f'(x^*)| < 1 \\; \\Rightarrow \\; \\text{stable} \\qquad |f'(x^*)| > 1 \\; \\Rightarrow \\; \\text{unstable}",
-            },
-            {
-              type: 'paragraph',
-              content:
-                'For the logistic map, the fixed point x* = 1 − 1/r exists for r > 1 and is stable while |r(1 − 2x*)| < 1, that is, while r < 3. At r = 3 the fixed point loses stability: a bifurcation is born.',
-            },
-            {
-              type: 'latex',
-              content: "x^* = 1 - \\frac{1}{r} \\qquad \\left| f'(x^*) \\right| = |2 - r|",
+              type: 'aside',
+              content: 'A straight line on a log scale means pure exponential growth.',
             },
           ],
         },
         keyPoints: {
           es: [
-            "|f'(x*)| < 1 ⇒ atractor estable; |f'(x*)| > 1 ⇒ inestable.",
-            'En el logístico, el punto fijo es estable para 1 < r < 3.',
+            'log F(n) es una recta de pendiente ln φ.',
+            'La sucesión crece exponencialmente, no cuadráticamente.',
           ],
           en: [
-            "|f'(x*)| < 1 ⇒ stable attractor; |f'(x*)| > 1 ⇒ unstable.",
-            'For the logistic map the fixed point is stable for 1 < r < 3.',
+            'log F(n) is a straight line of slope ln φ.',
+            'The sequence grows exponentially, not quadratically.',
           ],
-        },
-        demo: { modelId: 'logistic', r: 2.6, label: 'Punto fijo estable' },
-        quiz: {
-          question: '¿Cuándo es estable el punto fijo x* = 1 − 1/r del mapa logístico?',
-          options: [
-            { text: 'Siempre, para cualquier r > 1', correct: false },
-            { text: 'Mientras |2 − r| < 1, es decir r < 3', correct: true },
-            { text: 'Solo cuando r = 4', correct: false },
-            { text: 'Nunca es estable', correct: false },
-          ],
-          explanation:
-            "f'(x*) = r(1 − 2x*) = 2 − r. El punto fijo es estable cuando |2 − r| < 1, que ocurre para 1 < r < 3.",
         },
       },
       {
         id: 'm1-l3',
-        title: {
-          es: 'El logístico como modelo de población',
-          en: 'The logistic map as a population model',
-        },
+        title: { es: 'Términos grandes y Binet', en: 'Large terms and Binet' },
         intro: {
-          es: 'Un modelo sencillo de población revela una riqueza inesperada.',
-          en: 'A simple population model reveals unexpected richness.',
+          es: 'Con Binet podemos calcular cualquier F(n) sin sumar uno a uno.',
+          en: "With Binet's formula we can compute any F(n) without adding term by term.",
         },
         blocks: {
           es: [
             {
               type: 'paragraph',
               content:
-                'El mapa logístico x_{n+1} = r·xₙ(1 − xₙ) describe una población normalizada a una capacidad de carga. El término xₙ(1 − xₙ) modela la competencia por recursos: cuando la población es grande, el crecimiento se frena.',
+                'F(100) ≈ 3.54×10²⁰, F(200) ≈ 2.8×10⁴¹. El panel Inspector muestra F(n), Lucas y la descomposición de Zeckendorf de cualquier término.',
             },
             {
-              type: 'paragraph',
+              type: 'latex',
               content:
-                'El parámetro r es la tasa de crecimiento efectiva. Para r pequeños, la población tiende a un equilibrio. Al aumentar r, el equilibrio se vuelve oscilatorio y, para r > 3.57, el comportamiento se vuelve caótico: todo esto sin añadir ninguna aleatoriedad.',
-            },
-            {
-              type: 'aside',
-              content:
-                'El mapa de Ricker x_{n+1} = r·xₙ·e^(−xₙ) es otro modelo poblacional clásico con la misma ruta al caos. Compáralos en el laboratorio.',
+                'F(n) = \\frac{\\varphi^n - \\psi^n}{\\sqrt{5}}, \\quad \\psi = \\frac{1-\\sqrt{5}}{2}',
             },
           ],
           en: [
             {
               type: 'paragraph',
               content:
-                'The logistic map x_{n+1} = r·xₙ(1 − xₙ) describes a population normalized to a carrying capacity. The term xₙ(1 − xₙ) models competition for resources: when the population is large, growth slows down.',
+                'F(100) ≈ 3.54×10²⁰, F(200) ≈ 2.8×10⁴¹. The Inspector panel shows F(n), Lucas numbers and the Zeckendorf decomposition of any term.',
             },
             {
-              type: 'paragraph',
+              type: 'latex',
               content:
-                'The parameter r is the effective growth rate. For small r the population tends to an equilibrium. As r grows, the equilibrium becomes oscillatory and, beyond r > 3.57, the behavior turns chaotic — with no randomness added at all.',
-            },
-            {
-              type: 'aside',
-              content:
-                'The Ricker map x_{n+1} = r·xₙ·e^(−xₙ) is another classic population model with the same route to chaos. Compare them in the laboratory.',
+                'F(n) = \\frac{\\varphi^n - \\psi^n}{\\sqrt{5}}, \\quad \\psi = \\frac{1-\\sqrt{5}}{2}',
             },
           ],
         },
         keyPoints: {
-          es: [
-            'El logístico modela población con competencia por recursos.',
-            'Caos emergente a partir de un modelo totalmente determinista.',
-          ],
-          en: [
-            'The logistic map models population with resource competition.',
-            'Chaos emerges from a fully deterministic model.',
-          ],
+          es: ['Binet da F(n) en forma cerrada.', 'Los términos crecen astronómicamente.'],
+          en: ["Binet's formula gives F(n) in closed form.", 'Terms grow astronomically.'],
         },
       },
     ],
   },
   {
     id: 'm2',
-    icon: '⚡',
-    title: { es: 'Duplicación de periodo y Feigenbaum', en: 'Period doubling & Feigenbaum' },
+    icon: '✨',
+    title: { es: 'La razón áurea φ', en: 'The Golden Ratio φ' },
     summary: {
-      es: 'La cascada 2 → 4 → 8 → … y la constante universal δ.',
-      en: 'The 2 → 4 → 8 → … cascade and the universal constant δ.',
+      es: 'Definición, irracionalidad, fracción continua y convergencia de la razón.',
+      en: 'Definition, irrationality, continued fraction and the convergence of the ratio.',
     },
     lessons: [
       {
         id: 'm2-l1',
-        title: { es: 'La primera bifurcación', en: 'The first bifurcation' },
+        title: { es: 'φ = (1+√5)/2', en: 'φ = (1+√5)/2' },
         intro: {
-          es: 'En r = 3, un punto fijo se convierte en un ciclo de dos estados.',
-          en: 'At r = 3 a fixed point becomes a cycle of two states.',
+          es: 'La razón que divide un segmento en dos partes en proporción perfecta.',
+          en: 'The ratio that divides a segment into two parts in perfect proportion.',
         },
         blocks: {
           es: [
             {
               type: 'paragraph',
               content:
-                'En r = 3 el punto fijo del mapa logístico pierde estabilidad y nace un ciclo de periodo 2: la órbita alterna eternamente entre dos valores x_a y x_b, con x_a = f(x_b) y x_b = f(x_a). Esta es la primera bifurcación de duplicación de periodo.',
+                'Dividir un segmento AB en P tal que (AB/PB) = (PB/PA) conduce a la ecuación x² = x + 1, cuya solución positiva es φ.',
             },
             {
               type: 'latex',
-              content: 'x_a = f(x_b), \\qquad x_b = f(x_a), \\qquad x_a \\neq x_b',
-            },
-            {
-              type: 'paragraph',
               content:
-                'En el diagrama de bifurcación, en r = 3 la línea única se parte en dos ramas. El punto c = −0.75 del eje real de Mandelbrot corresponde exactamente a esta bifurcación.',
+                '\\varphi = \\frac{1+\\sqrt{5}}{2} \\approx 1.6180339887, \\quad \\varphi^2 = \\varphi + 1, \\quad 1/\\varphi = \\varphi - 1',
             },
+            { type: 'aside', content: 'φ y 1/φ difieren en 1: la proporción es autorreplicante.' },
           ],
           en: [
             {
               type: 'paragraph',
               content:
-                'At r = 3 the logistic fixed point loses stability and a period-2 cycle is born: the orbit alternates forever between two values x_a and x_b, with x_a = f(x_b) and x_b = f(x_a). This is the first period-doubling bifurcation.',
+                'Dividing a segment AB at P so that (AB/PB) = (PB/PA) leads to the equation x² = x + 1, whose positive solution is φ.',
             },
             {
               type: 'latex',
-              content: 'x_a = f(x_b), \\qquad x_b = f(x_a), \\qquad x_a \\neq x_b',
+              content:
+                '\\varphi = \\frac{1+\\sqrt{5}}{2} \\approx 1.6180339887, \\quad \\varphi^2 = \\varphi + 1, \\quad 1/\\varphi = \\varphi - 1',
             },
             {
-              type: 'paragraph',
-              content:
-                'In the bifurcation diagram, the single line splits into two branches at r = 3. The point c = −0.75 on the Mandelbrot real axis corresponds exactly to this bifurcation.',
+              type: 'aside',
+              content: 'φ and 1/φ differ by 1: the proportion is self-replicating.',
             },
           ],
         },
         keyPoints: {
-          es: [
-            'En r = 3: punto fijo → ciclo de periodo 2.',
-            'c = −0.75 marca la frontera periodo 1 → 2 en Mandelbrot.',
-          ],
-          en: [
-            'At r = 3: fixed point → period-2 cycle.',
-            'c = −0.75 marks the period 1 → 2 boundary in Mandelbrot.',
-          ],
+          es: ['φ² = φ + 1 es la identidad esencial.', '1/φ = φ − 1 ≈ 0.618.'],
+          en: ['φ² = φ + 1 is the essential identity.', '1/φ = φ − 1 ≈ 0.618.'],
         },
-        demo: { modelId: 'logistic', r: 3.2, label: 'Órbita de periodo 2' },
         quiz: {
-          question: '¿Qué ocurre exactamente en r = 3 para el mapa logístico?',
+          question: '¿Qué igualdad define a φ?',
           options: [
-            { text: 'La población se extingue', correct: false },
-            {
-              text: 'El punto fijo pierde estabilidad y nace un ciclo de periodo 2',
-              correct: true,
-            },
-            { text: 'El sistema se vuelve caótico de inmediato', correct: false },
-            { text: 'El punto fijo se hace más estable', correct: false },
+            { text: 'φ² = φ + 1', correct: true },
+            { text: 'φ² = 2φ', correct: false },
+            { text: 'φ = π/2', correct: false },
+            { text: 'φ² = 1', correct: false },
           ],
-          explanation:
-            "En r = 3 la derivada en el punto fijo alcanza |f'(x*)| = 1 y el punto fijo se vuelve inestable: aparece una órbita de periodo 2.",
+          explanation: 'La definición geométrica de la proporción áurea conduce a x² = x + 1.',
         },
       },
       {
         id: 'm2-l2',
-        title: { es: 'La cascada de duplicación', en: 'The doubling cascade' },
+        title: { es: 'Irracional y continua', en: 'Irrational and continued' },
         intro: {
-          es: 'Periodo 2 → 4 → 8 → … cada vez más rápido.',
-          en: 'Period 2 → 4 → 8 → … faster and faster.',
+          es: 'φ es irracional; su fracción continua es la más simple posible.',
+          en: 'φ is irrational; its continued fraction is the simplest possible.',
         },
         blocks: {
           es: [
             {
               type: 'paragraph',
               content:
-                'Al aumentar r, el ciclo de periodo 2 pierde estabilidad en r ≈ 3.449 y cada punto se duplica, generando periodo 4. En r ≈ 3.544, periodo 8. Los valores de r donde ocurre cada duplicación se acumulan cada vez más rápido.',
+                'φ es algebraico (raíz de x²−x−1) e irracional. Su fracción continua es [1; 1, 1, 1, …]: todos sus cocientes son 1.',
             },
             {
               type: 'latex',
               content:
-                'r_1 = 3.0 \\; \\to \\; r_2 = 3.449 \\; \\to \\; r_3 = 3.544 \\; \\to \\; r_4 = 3.564 \\; \\to \\; \\ldots',
-            },
-            {
-              type: 'paragraph',
-              content:
-                'Haz zoom en el diagrama de bifurcación: cada rama repite, a menor escala, la estructura completa. Esta autosimilitud es la firma del caos determinista.',
+                '\\varphi = [1; \\overline{1}] = 1 + \\cfrac{1}{1 + \\cfrac{1}{1 + \\cdots}}',
             },
           ],
           en: [
             {
               type: 'paragraph',
               content:
-                'As r grows, the period-2 cycle loses stability at r ≈ 3.449 and each point doubles, producing period 4. At r ≈ 3.544, period 8. The r values where each doubling occurs accumulate faster and faster.',
+                'φ is algebraic (root of x²−x−1) and irrational. Its continued fraction is [1; 1, 1, 1, …]: all quotients equal 1.',
             },
             {
               type: 'latex',
               content:
-                'r_1 = 3.0 \\; \\to \\; r_2 = 3.449 \\; \\to \\; r_3 = 3.544 \\; \\to \\; r_4 = 3.564 \\; \\to \\; \\ldots',
-            },
-            {
-              type: 'paragraph',
-              content:
-                'Zoom into the bifurcation diagram: each branch repeats, at a smaller scale, the whole structure. This self-similarity is the fingerprint of deterministic chaos.',
+                '\\varphi = [1; \\overline{1}] = 1 + \\cfrac{1}{1 + \\cfrac{1}{1 + \\cdots}}',
             },
           ],
         },
         keyPoints: {
-          es: [
-            'Las bifurcaciones se acumulan en r∞ ≈ 3.5699.',
-            'El diagrama es autosimilar: repite su estructura a menor escala.',
-          ],
-          en: [
-            'Bifurcations accumulate at r∞ ≈ 3.5699.',
-            'The diagram is self-similar: it repeats its structure at smaller scales.',
-          ],
+          es: ['La fracción continua de φ es [1;1,1,1,…].', 'Los convergentes son F(n+1)/F(n).'],
+          en: ['The continued fraction of φ is [1;1,1,1,…].', 'Convergents are F(n+1)/F(n).'],
         },
       },
       {
         id: 'm2-l3',
-        title: { es: 'La constante de Feigenbaum', en: 'The Feigenbaum constant' },
+        title: { es: 'Convergencia de la razón', en: 'Convergence of the ratio' },
         intro: {
-          es: 'Una razón universal que gobierna la cascada en toda familia unimodal.',
-          en: 'A universal ratio governing the cascade in every unimodal family.',
+          es: 'F(n+1)/F(n) se acerca a φ alternando por encima y por debajo.',
+          en: 'F(n+1)/F(n) approaches φ oscillating above and below.',
         },
         blocks: {
           es: [
             {
               type: 'paragraph',
               content:
-                'La distancia entre bifurcaciones consecutivas se encoge con una razón que tiende a una constante universal:',
+                'En el panel "Convergencia" la curva de razones oscila alrededor de la asíntota roja φ. n par queda debajo; n impar arriba. Ya con n = 32 el error es ≈ 10⁻⁶.',
             },
             {
               type: 'latex',
               content:
-                '\\delta = \\lim_{n\\to\\infty} \\frac{r_{n} - r_{n-1}}{r_{n+1} - r_{n}} \\approx 4.6692016',
-            },
-            {
-              type: 'paragraph',
-              content:
-                'Lo sorprendente es que δ no depende de la función: el mapa logístico, el seno r·sin(πx), el cúbico y el de Ricker comparten exactamente la misma constante. Es la evidencia más clara de la universalidad del caos.',
+                '\\left|\\frac{F(n+1)}{F(n)} - \\varphi\\right| \\sim \\frac{1}{\\sqrt{5}\\;\\varphi^{2n}}\\to 0',
             },
             {
               type: 'aside',
-              content:
-                'En el laboratorio, activa la curva de Lyapunov y observa cómo cruza a valores positivos justo en el límite de acumulación r∞ ≈ 3.57.',
+              content: 'La convergencia es geométrica (exponencial), la más rápida posible.',
             },
           ],
           en: [
             {
               type: 'paragraph',
               content:
-                'The distance between consecutive bifurcations shrinks with a ratio that tends to a universal constant:',
+                'In the Convergence panel the ratio curve oscillates around the red φ asymptote. Even n stays below; odd n above. At n = 32 the error is already ≈ 10⁻⁶.',
             },
             {
               type: 'latex',
               content:
-                '\\delta = \\lim_{n\\to\\infty} \\frac{r_{n} - r_{n-1}}{r_{n+1} - r_{n}} \\approx 4.6692016',
-            },
-            {
-              type: 'paragraph',
-              content:
-                'The surprise is that δ does not depend on the function: the logistic map, the sine map r·sin(πx), the cubic and Ricker maps share exactly the same constant. It is the clearest evidence of the universality of chaos.',
+                '\\left|\\frac{F(n+1)}{F(n)} - \\varphi\\right| \\sim \\frac{1}{\\sqrt{5}\\;\\varphi^{2n}}\\to 0',
             },
             {
               type: 'aside',
-              content:
-                'In the laboratory, enable the Lyapunov curve and watch it cross to positive values right at the accumulation limit r∞ ≈ 3.57.',
+              content: 'The convergence is geometric (exponential), the fastest possible.',
             },
           ],
         },
         keyPoints: {
-          es: [
-            'δ ≈ 4.6692 es universal.',
-            'Logístico, seno, cúbico y Ricker comparten la misma ruta.',
-          ],
-          en: [
-            'δ ≈ 4.6692 is universal.',
-            'Logistic, sine, cubic and Ricker share the same route.',
-          ],
+          es: ['Alternancia par/impar alrededor de φ.', 'El error cae exponencialmente.'],
+          en: ['Even/odd alternation around φ.', 'The error decays exponentially.'],
         },
-        demo: { modelId: 'logistic', r: 3.57, label: 'Límite de Feigenbaum' },
-        quiz: {
-          question: '¿Qué afirma la constante de Feigenbaum δ ≈ 4.6692?',
-          options: [
-            { text: 'Es el número de bifurcaciones del mapa logístico', correct: false },
-            {
-              text: 'La razón de intervalos de bifurcación tiende a δ en cualquier familia unimodal suave',
-              correct: true,
-            },
-            { text: 'Es la tasa de crecimiento máxima del logístico', correct: false },
-            { text: 'Solo es válida para el mapa seno', correct: false },
-          ],
-          explanation:
-            'δ es la razón límite (rₙ − rₙ₋₁)/(rₙ₊₁ − rₙ) y es la misma para toda familia unimodal suave: universalidad del caos.',
-        },
+        demo: { label: 'Convergencia de la razón', styleId: 'sunflower', n: 233 },
       },
     ],
   },
   {
     id: 'm3',
-    icon: '📈',
-    title: { es: 'Lyapunov y sensibilidad', en: 'Lyapunov & sensitivity' },
+    icon: '🧮',
+    title: { es: 'Binet y números asociados', en: 'Binet and related numbers' },
     summary: {
-      es: 'El exponente de Lyapunov, el efecto mariposa y cómo medir el caos.',
-      en: 'The Lyapunov exponent, the butterfly effect and how to measure chaos.',
+      es: 'Fórmula cerrada, números de Lucas, sumas e identidades.',
+      en: 'Closed form, Lucas numbers, sums and identities.',
     },
     lessons: [
       {
         id: 'm3-l1',
-        title: { es: 'El exponente de Lyapunov', en: 'The Lyapunov exponent' },
+        title: { es: 'Fórmula de Binet', en: "Binet's formula" },
         intro: {
-          es: 'Un número que cuantifica la separación de órbitas vecinas.',
-          en: 'A number that quantifies the divergence of nearby orbits.',
+          es: 'La fórmula de Binet expresa F(n) con dos raíces φ y ψ.',
+          en: "Binet's formula expresses F(n) with the two roots φ and ψ.",
         },
         blocks: {
           es: [
             {
               type: 'paragraph',
               content:
-                'El exponente de Lyapunov promedia el logaritmo de la pendiente del mapa a lo largo de la órbita:',
+                'Resolviendo el "polinomio característico" de la recurrencia se obtienen α = φ y β = ψ = (1−√5)/2. Como |ψ| < 1, su potencia βⁿ se desvanece: F(n) ≈ φⁿ/√5.',
             },
-            {
-              type: 'latex',
-              content:
-                "\\lambda = \\lim_{N\\to\\infty} \\frac{1}{N} \\sum_{i=1}^{N} \\ln \\left| f'(x_i) \\right|",
-            },
-            {
-              type: 'paragraph',
-              content:
-                'Si λ < 0, las órbitas vecinas se acercan (atractor periódico); si λ = 0, estamos en un punto crítico de bifurcación; si λ > 0, se separan exponencialmente: caos.',
-            },
+            { type: 'latex', content: 'F(n) = \\frac{\\varphi^n - \\psi^n}{\\sqrt{5}}' },
           ],
           en: [
             {
               type: 'paragraph',
               content:
-                'The Lyapunov exponent averages the logarithm of the map slope along the orbit:',
+                "Solving the recurrence's characteristic polynomial gives α = φ and β = ψ = (1−√5)/2. Since |ψ| < 1, its power βⁿ dies out: F(n) ≈ φⁿ/√5.",
             },
-            {
-              type: 'latex',
-              content:
-                "\\lambda = \\lim_{N\\to\\infty} \\frac{1}{N} \\sum_{i=1}^{N} \\ln \\left| f'(x_i) \\right|",
-            },
-            {
-              type: 'paragraph',
-              content:
-                'If λ < 0, nearby orbits converge (periodic attractor); if λ = 0, we are at a critical bifurcation point; if λ > 0, they separate exponentially: chaos.',
-            },
+            { type: 'latex', content: 'F(n) = \\frac{\\varphi^n - \\psi^n}{\\sqrt{5}}' },
           ],
         },
         keyPoints: {
           es: [
-            'λ < 0: atractor periódico; λ > 0: caos.',
-            'El Inspector muestra λ en tiempo real para cada r.',
+            'Binet es la solución cerrada de la recurrencia.',
+            'β < 1 explica el crecimiento de F(n).',
           ],
           en: [
-            'λ < 0: periodic attractor; λ > 0: chaos.',
-            'The Inspector shows λ in real time for every r.',
+            'Binet is the closed-form solution of the recurrence.',
+            'β < 1 explains the growth of F(n).',
           ],
         },
       },
       {
         id: 'm3-l2',
-        title: { es: 'El efecto mariposa', en: 'The butterfly effect' },
+        title: { es: 'Números de Lucas', en: 'Lucas numbers' },
         intro: {
-          es: 'Errores microscópicos que crecen exponencialmente.',
-          en: 'Microscopic errors that grow exponentially.',
+          es: 'La "sucesión hermana" con la misma recurrencia y condiciones iniciales distintas.',
+          en: 'The "sister sequence" with the same recurrence and different initial conditions.',
         },
         blocks: {
           es: [
             {
               type: 'paragraph',
               content:
-                'Si dos condiciones iniciales difieren en δ₀, tras n pasos su separación crece como δ ≈ δ₀·e^{λn}. Con λ > 0, un error de una millonésima puede dominar la evolución en pocas decenas de pasos.',
+                'L(0)=2, L(1)=1, L(n)=L(n−1)+L(n−2): 2, 1, 3, 4, 7, 11, 18, 29… Lucas también admite forma cerrada con αⁿ+βⁿ. Relaciones: F(2n) = F(n)L(n).',
             },
             {
               type: 'latex',
-              content: '\\delta_n \\approx \\delta_0 \\, e^{\\lambda n}',
-            },
-            {
-              type: 'paragraph',
-              content:
-                'Esta es la razón por la que el clima a largo plazo es impredecible: los modelos son deterministas, pero los errores de medida se amplifican. Lorenz lo llamó "efecto mariposa": el aleteo de una mariposa puede, en principio, alterar un huracán.',
+              content: 'L(n) = \\varphi^n + \\psi^n, \\qquad F(2n) = F(n)\\cdot L(n)',
             },
           ],
           en: [
             {
               type: 'paragraph',
               content:
-                'If two initial conditions differ by δ₀, after n steps their separation grows as δ ≈ δ₀·e^{λn}. With λ > 0, a one-in-a-million error can dominate the evolution within a few tens of steps.',
+                'L(0)=2, L(1)=1, L(n)=L(n−1)+L(n−2): 2, 1, 3, 4, 7, 11, 18, 29… Lucas also has a closed form αⁿ+βⁿ. Identities: F(2n) = F(n)L(n).',
             },
             {
               type: 'latex',
-              content: '\\delta_n \\approx \\delta_0 \\, e^{\\lambda n}',
-            },
-            {
-              type: 'paragraph',
-              content:
-                'This is why long-term weather is unpredictable: the models are deterministic, but measurement errors get amplified. Lorenz called it the "butterfly effect": the flap of a butterfly could, in principle, alter a hurricane.',
+              content: 'L(n) = \\varphi^n + \\psi^n, \\qquad F(2n) = F(n)\\cdot L(n)',
             },
           ],
         },
         keyPoints: {
-          es: [
-            'La separación de órbitas crece como e^{λn}.',
-            'Sensibilidad extrema ⇒ límite fundamental a la predicción.',
-          ],
-          en: [
-            'Orbit separation grows like e^{λn}.',
-            'Extreme sensitivity ⇒ fundamental prediction limit.',
-          ],
+          es: ['Lucas comparte recurrencia con Fibonacci.', 'F(2n) = F(n)·L(n).'],
+          en: ['Lucas shares the recurrence with Fibonacci.', 'F(2n) = F(n)·L(n).'],
         },
       },
       {
         id: 'm3-l3',
-        title: {
-          es: 'Midiendo el caos en el laboratorio',
-          en: 'Measuring chaos in the laboratory',
-        },
+        title: { es: 'Sumas y Zeckendorf', en: 'Sums and Zeckendorf' },
         intro: {
-          es: 'Usa la curva de Lyapunov para localizar las regiones caóticas.',
-          en: 'Use the Lyapunov curve to locate the chaotic regions.',
+          es: 'La suma de los n primeros Fibonacci es F(n+2)−1; todo número se descompone en Fibonacci no consecutivos.',
+          en: 'The sum of the first n Fibonacci numbers is F(n+2)−1; every number decomposes into non-consecutive Fibonacci terms.',
         },
         blocks: {
           es: [
             {
               type: 'paragraph',
               content:
-                'En el diagrama de bifurcación, activa la opción Lyapunov. La curva ámbar muestra λ(r): donde es positiva, el diagrama es una nube densa (caos); donde es negativa, hay ramas periódicas definidas.',
+                'Σ_{i=1..n} F(i) = F(n+2) − 1. El teorema de Zeckendorf afirma que todo entero positivo se escribe de forma única como suma de Fibonacci no consecutivos: 100 = 89 + 8 + 3 = F(11)+F(6)+F(4).',
             },
             {
-              type: 'paragraph',
+              type: 'latex',
               content:
-                'Ajusta r = 3.9: λ > 0 y la órbita recorre una nube. Luego r = 3.2: λ < 0 y la órbita alterna entre dos valores. El Inspector identifica el periodo de la órbita automáticamente.',
+                '\\sum_{i=1}^{n} F(i) = F(n+2) - 1, \\quad \\text{Zeckendorf: } n = \\sum F(i_j),\\ i_j\\ \\text{no consecutivos}',
             },
           ],
           en: [
             {
               type: 'paragraph',
               content:
-                'In the bifurcation diagram, enable the Lyapunov option. The amber curve shows λ(r): where it is positive, the diagram is a dense cloud (chaos); where negative, there are well-defined periodic branches.',
+                'Σ_{i=1..n} F(i) = F(n+2) − 1. Zeckendorf’s theorem states every positive integer has a unique representation as a sum of non-consecutive Fibonacci numbers: 100 = 89 + 8 + 3 = F(11)+F(6)+F(4).',
             },
             {
-              type: 'paragraph',
+              type: 'latex',
               content:
-                'Set r = 3.9: λ > 0 and the orbit sweeps a cloud. Then r = 3.2: λ < 0 and the orbit alternates between two values. The Inspector identifies the orbit period automatically.',
+                '\\sum_{i=1}^{n} F(i) = F(n+2) - 1, \\quad \\text{Zeckendorf: } n = \\sum F(i_j),\\ i_j\\ \\text{ non-consecutive}',
             },
           ],
         },
         keyPoints: {
-          es: [
-            'La curva de Lyapunov es el "termómetro" del caos.',
-            'Comprueba r = 3.9 (caos) vs r = 3.2 (periodo 2).',
-          ],
-          en: [
-            'The Lyapunov curve is the "thermometer" of chaos.',
-            'Check r = 3.9 (chaos) vs r = 3.2 (period 2).',
-          ],
+          es: ['ΣF(i)=F(n+2)−1.', 'La representación de Zeckendorf es única.'],
+          en: ['ΣF(i)=F(n+2)−1.', 'The Zeckendorf representation is unique.'],
         },
-        demo: { modelId: 'logistic', r: 3.9, label: 'Régimen caótico (λ > 0)' },
         quiz: {
-          question: 'Si λ > 0 para un parámetro r, el sistema:',
+          question: 'La suma 1+1+2+3+5+8 (n=6) vale:',
           options: [
-            { text: 'Converge a un punto fijo estable', correct: false },
-            { text: 'Es caótico: las órbitas vecinas divergen exponencialmente', correct: true },
-            { text: 'Se apaga por completo', correct: false },
-            { text: 'Oscila con periodo exactamente 1', correct: false },
+            { text: '20', correct: true },
+            { text: '21', correct: false },
+            { text: '19', correct: false },
+            { text: '18', correct: false },
           ],
-          explanation:
-            'λ > 0 indica divergencia exponencial de órbitas vecinas, la definición operativa del caos determinista.',
+          explanation: 'ΣF(i)=F(8)−1=21−1=20.',
         },
       },
     ],
   },
   {
     id: 'm4',
-    icon: '🌀',
-    title: { es: 'Caos, atractores y universalidad', en: 'Chaos, attractors & universality' },
+    icon: '➰',
+    title: { es: 'Espiral y rectángulo áureo', en: 'Golden spiral & rectangle' },
     summary: {
-      es: 'Qué es el caos determinista, las ventanas de orden y la universalidad.',
-      en: 'What deterministic chaos is, order windows and universality.',
+      es: 'El rectángulo 1:φ, su teselación y la espiral áurea en el arte.',
+      en: 'The 1:φ rectangle, its tiling and the golden spiral in art.',
     },
     lessons: [
       {
         id: 'm4-l1',
-        title: { es: '¿Qué es el caos determinista?', en: 'What is deterministic chaos?' },
+        title: { es: 'El rectángulo 1 : φ', en: 'The 1 : φ rectangle' },
         intro: {
-          es: 'Determinismo no implica predictibilidad.',
-          en: 'Determinism does not imply predictability.',
+          es: 'Si quitas un cuadrado a un rectángulo áureo, queda otro rectángulo áureo.',
+          en: 'Remove a square from a golden rectangle and the remainder is another golden rectangle.',
         },
         blocks: {
           es: [
             {
               type: 'paragraph',
               content:
-                'Caos determinista es el comportamiento aperiódico y sensible a las condiciones iniciales de un sistema regido por reglas exactas. No hay azar: con la misma x₀, la órbita es idéntica. Pero cualquier error inicial, por pequeño que sea, se amplifica.',
+                'La propiedad autorreplicante del rectángulo 1:φ: al extraer el mayor cuadrado posible, el resto mantiene la misma proporción. Es la base de la teselación y de la espiral áurea.',
             },
             {
-              type: 'paragraph',
+              type: 'latex',
               content:
-                'Tres ingredientes definen el caos: (1) sensibilidad a las condiciones iniciales, (2) aperiodicidad (la órbita no se repite), y (3) estructura determinista (la regla f es fija y precisa).',
+                '\\frac{L}{H} = \\varphi = \\frac{L-H}{H} \\;\\;\\text{si } H = L - \\frac{L}{\\varphi}',
             },
           ],
           en: [
             {
               type: 'paragraph',
               content:
-                'Deterministic chaos is the aperiodic, initial-condition-sensitive behavior of a system governed by exact rules. There is no randomness: with the same x₀, the orbit is identical. But any initial error, however small, gets amplified.',
+                'The self-replicating property of the 1:φ rectangle: extracting the largest square leaves a remainder with the same proportion. This underlies the tiling and the golden spiral.',
             },
             {
-              type: 'paragraph',
+              type: 'latex',
               content:
-                'Three ingredients define chaos: (1) sensitivity to initial conditions, (2) aperiodicity (the orbit never repeats), and (3) deterministic structure (the rule f is fixed and precise).',
+                '\\frac{L}{H} = \\varphi = \\frac{L-H}{H} \\;\\;\\text{if } H = L - \\frac{L}{\\varphi}',
             },
           ],
         },
         keyPoints: {
           es: [
-            'Caos ≠ azar: hay regla exacta y órbita única.',
-            'Sensibilidad + aperiodicidad + determinismo.',
+            'El rectángulo áureo es autorreplicante.',
+            'Cada cuadrado de la teselación es un término de Fibonacci.',
           ],
           en: [
-            'Chaos ≠ randomness: exact rule and unique orbit.',
-            'Sensitivity + aperiodicity + determinism.',
+            'The golden rectangle is self-replicating.',
+            'Each tiling square is a Fibonacci term.',
           ],
         },
+        demo: { label: 'Teselación áurea', styleId: 'sunflower', n: 233 },
       },
       {
         id: 'm4-l2',
-        title: { es: 'Ventanas de orden dentro del caos', en: 'Order windows inside chaos' },
+        title: { es: 'La espiral de Fischer', en: 'The Fibonacci spiral' },
         intro: {
-          es: 'Periodo 3 implica caos: el teorema de Li–Yorke.',
-          en: 'Period 3 implies chaos: the Li–Yorke theorem.',
+          es: 'Cuartos de círculo en los cuadrados de la teselación forman una espiral suave.',
+          en: 'Quarter-circles in the tiling’s squares form a smooth spiral.',
         },
         blocks: {
           es: [
             {
               type: 'paragraph',
               content:
-                'En r ≈ 3.83, dentro del mar caótico, emerge de repente una ventana periódica de periodo 3. El teorema de Li–Yorke (1975) demostró un hecho profundo: si un mapa continuo en el intervalo tiene una órbita de periodo 3, entonces tiene órbitas de todos los periodos.',
+                'Concatenando arcos de 90° dentro de cada cuadrado se obtiene la espiral de Fibonacci. Su límite es la espiral logarítmica de razón φ (spira mirabilis), a la que se aproxima la concha del nautilus.',
             },
-            {
-              type: 'latex',
-              content: '\\text{Periodo 3 } \\Rightarrow \\text{ caos (Li--Yorke, 1975)}',
-            },
-            {
-              type: 'paragraph',
-              content:
-                'Localiza la ventana en el laboratorio (r ≈ 3.83): verás tres ramas nítidas rodeadas de caos. Dentro de cada rama, al acercarte, hay nuevas cascadas: caos dentro de orden dentro de caos.',
-            },
+            { type: 'latex', content: 'r(\\theta) = a\\,\\varphi^{2\\theta/\\pi}' },
           ],
           en: [
             {
               type: 'paragraph',
               content:
-                'At r ≈ 3.83, inside the chaotic sea, a period-3 window suddenly emerges. The Li–Yorke theorem (1975) proved a deep fact: if a continuous interval map has a period-3 orbit, then it has orbits of every period.',
+                'Concatenating 90° arcs inside each square yields the Fibonacci spiral. Its limit is the logarithmic spiral of ratio φ (spira mirabilis), approximated by the nautilus shell.',
             },
-            {
-              type: 'latex',
-              content: '\\text{Period 3 } \\Rightarrow \\text{ chaos (Li--Yorke, 1975)}',
-            },
-            {
-              type: 'paragraph',
-              content:
-                'Locate the window in the laboratory (r ≈ 3.83): you will see three crisp branches surrounded by chaos. Inside each branch, zooming in reveals new cascades: chaos within order within chaos.',
-            },
+            { type: 'latex', content: 'r(\\theta) = a\\,\\varphi^{2\\theta/\\pi}' },
           ],
         },
         keyPoints: {
-          es: ['Periodo 3 ⇒ caos (Li–Yorke).', 'La ventana r ≈ 3.83 es caos dentro de orden.'],
-          en: ['Period 3 ⇒ chaos (Li–Yorke).', 'The r ≈ 3.83 window is order inside chaos.'],
+          es: [
+            'La espiral de Fibonacci es la envolvente de arcos de 90°.',
+            'Su límite es la espira mirabilis φ.',
+          ],
+          en: ['The Fibonacci spiral envelopes 90° arcs.', 'Its limit is the φ spira mirabilis.'],
         },
-        demo: { modelId: 'logistic', r: 3.83, label: 'Ventana de periodo 3' },
       },
       {
         id: 'm4-l3',
-        title: { es: 'La universalidad del caos', en: 'The universality of chaos' },
+        title: { es: 'En arte y arquitectura', en: 'In art and architecture' },
         intro: {
-          es: 'La misma ruta al caos en familias muy distintas.',
-          en: 'The same route to chaos in very different families.',
+          es: 'El rectángulo áureo aparece en fachadas, lienzos y composiciones famosas.',
+          en: 'The golden rectangle appears in façades, canvases and famous compositions.',
         },
         blocks: {
           es: [
             {
               type: 'paragraph',
               content:
-                'Cambia el modelo en el laboratorio: seno (r·sin(πx)), cúbico (r·x(1−x²)), Ricker (r·x·e^(−x)) o polinómico. Todos muestran la misma cascada de duplicación de periodo y la misma constante de Feigenbaum.',
+                'La fachada del Partenón se inscribe en un rectángulo áureo; Carrá, Seurat y el diseño editorial moderno usan retículas 1:φ. La "divina proporción" de Luca Pacioli (1509) selló el mito renacentista.',
             },
             {
-              type: 'paragraph',
+              type: 'aside',
               content:
-                'Esta universalidad hace del caos un fenómeno transversal a disciplinas: matemáticas, física, biología, ingeniería y economía comparten la misma fenomenología aunque las ecuaciones concretas sean distintas.',
+                'Muchas "supuestas" apariciones son exageradas: la proporción áurea se usa como herramienta compositiva, no como ley universal.',
             },
           ],
           en: [
             {
               type: 'paragraph',
               content:
-                'Change the model in the laboratory: sine (r·sin(πx)), cubic (r·x(1−x²)), Ricker (r·x·e^(−x)) or polynomial. They all show the same period-doubling cascade and the same Feigenbaum constant.',
+                'The Parthenon’s façade inscribes in a golden rectangle; Carrà, Seurat and modern editorial design use 1:φ grids. Luca Pacioli’s "divine proportion" (1509) sealed the Renaissance myth.',
             },
             {
-              type: 'paragraph',
+              type: 'aside',
               content:
-                'This universality makes chaos a cross-cutting phenomenon: mathematics, physics, biology, engineering and economics share the same phenomenology even though the concrete equations differ.',
+                'Many "claimed" sightings are overstated: the golden ratio is a compositional tool, not a universal law.',
             },
           ],
         },
         keyPoints: {
           es: [
-            'La ruta al caos es universal entre familias unimodales.',
-            'δ ≈ 4.6692 conecta disciplinas muy distintas.',
+            'φ aparece en composiciones reales (Partenón, diseño).',
+            'El mito supera a la evidencia: úsalo con criterio.',
           ],
           en: [
-            'The route to chaos is universal among unimodal families.',
-            'δ ≈ 4.6692 bridges very different disciplines.',
+            'φ appears in real compositions (Parthenon, design).',
+            'Myth outruns evidence: use it critically.',
           ],
         },
-        demo: { modelId: 'sine', r: 0.72, label: 'Cascada en el mapa seno' },
       },
     ],
   },
   {
     id: 'm5',
-    icon: '🧭',
-    title: { es: 'Espiral Áurea: el atlas complejo', en: 'The Golden Spiral atlas' },
+    icon: '🌻',
+    title: { es: 'Filotaxis y la naturaleza', en: 'Phyllotaxis and nature' },
     summary: {
-      es: 'Del eje real al plano complejo: la Espiral Áurea como atlas de órbitas.',
-      en: 'From the real axis to the complex plane: the Golden Spiral as an atlas of orbits.',
+      es: 'El ángulo áureo 137.5°, las espirales del girasol y el nautilus.',
+      en: 'The 137.5° golden angle, sunflower spirals and the nautilus.',
     },
     lessons: [
       {
         id: 'm5-l1',
-        title: { es: 'De los reales al plano complejo', en: 'From the reals to the complex plane' },
+        title: { es: 'El ángulo áureo', en: 'The golden angle' },
         intro: {
-          es: 'Iterar con números complejos abre un universo nuevo.',
-          en: 'Iterating with complex numbers opens a new universe.',
+          es: 'La fracción del giro completo que deja la razón más irracional.',
+          en: 'The fraction of a full turn that leaves the most irrational ratio.',
         },
         blocks: {
           es: [
             {
               type: 'paragraph',
               content:
-                'El conjunto de Mandelbrot se define iterando z_{n+1} = zₙ² + c con c complejo. Si la órbita que parte de z₀ = 0 no escapa al infinito, el punto c pertenece al conjunto. El color de cada punto depende de la velocidad de escape.',
+                'El ángulo áureo es la porción del círculo que deja el número más "apartado" de cualquier fracción racional: a = 360°·(2−φ)? No: a = 360°/φ² ≈ 137.508°. Cada primordio gira ese ángulo respecto al anterior.',
             },
-            {
-              type: 'latex',
-              content: 'z_{n+1} = z_n^2 + c, \\qquad z_0 = 0, \\qquad c \\in \\mathbb{C}',
-            },
-            {
-              type: 'paragraph',
-              content:
-                'En el laboratorio puedes hacer zoom en el Mandelbrot infinitamente: la frontera es un fractal, con autosimilitud a todas las escalas.',
-            },
+            { type: 'latex', content: 'a = \\frac{360°}{\\varphi^2} \\approx 137.50776°' },
           ],
           en: [
             {
               type: 'paragraph',
               content:
-                'The Mandelbrot set is defined by iterating z_{n+1} = zₙ² + c with complex c. If the orbit starting at z₀ = 0 does not escape to infinity, then c belongs to the set. The color of each point depends on the escape speed.',
+                'The golden angle is the fraction of the circle left by the “most irrational” number: a = 360°/φ² ≈ 137.508°. Each primordium is rotated by that angle from the previous one.',
             },
-            {
-              type: 'latex',
-              content: 'z_{n+1} = z_n^2 + c, \\qquad z_0 = 0, \\qquad c \\in \\mathbb{C}',
-            },
-            {
-              type: 'paragraph',
-              content:
-                'In the laboratory you can zoom into the Mandelbrot set forever: the boundary is a fractal, self-similar at every scale.',
-            },
+            { type: 'latex', content: 'a = \\frac{360°}{\\varphi^2} \\approx 137.50776°' },
           ],
         },
         keyPoints: {
-          es: [
-            'Espiral Áurea: c complejo cuya órbita desde 0 no escapa.',
-            'La frontera es un fractal infinitamente detallado.',
+          es: ['El ángulo áureo ≈ 137.508°.', 'Es la razón más irracional: 360/φ².'],
+          en: ['The golden angle is ≈ 137.508°.', 'It is the most irrational ratio: 360/φ².'],
+        },
+        quiz: {
+          question: 'El ángulo áureo en grados es:',
+          options: [
+            { text: '137.5°', correct: true },
+            { text: '90°', correct: false },
+            { text: '180°', correct: false },
+            { text: '45°', correct: false },
           ],
-          en: [
-            'Golden Spiral: complex c whose orbit from 0 does not escape.',
-            'The boundary is an infinitely detailed fractal.',
-          ],
+          explanation: '360/φ² ≈ 137.508°.',
         },
       },
       {
         id: 'm5-l2',
-        title: { es: 'El isomorfismo exacto', en: 'The exact isomorphism' },
+        title: { es: 'El girasol', en: 'The sunflower' },
         intro: {
-          es: 'Un cambio de variable conecta el logístico con Mandelbrot.',
-          en: 'A change of variables connects the logistic map with Mandelbrot.',
+          es: 'Las semillas del girasol dibujan espirales cuyo número es un par de Fibonacci.',
+          en: 'Sunflower seeds trace spirals whose counts are a Fibonacci pair.',
         },
         blocks: {
           es: [
             {
               type: 'paragraph',
               content:
-                'Aplicando el cambio de variable z = −r·x + r/2 al mapa logístico se obtiene, tras reescalar, la iteración cuadrática z² + c con:',
+                'En un girasol típico ves espirales en dos sentidos: 34 y 55, o 55 y 89, o 89 y 144 — siempre números de Fibonacci consecutivos. El panel Filotaxis lo reproduce: con 377 semillas aparecen las espirales 144/233.',
             },
             {
-              type: 'latex',
+              type: 'aside',
               content:
-                'c = \\frac{2r - r^2}{4} \\quad \\Longleftrightarrow \\quad r = 1 + \\sqrt{1 - 4c}',
-            },
-            {
-              type: 'paragraph',
-              content:
-                'Esta conjugación exacta significa que la dinámica del logístico y la del eje real de la Espiral Áurea son la misma bajo un cambio de coordenadas. El laboratorio muestra el conector r ↔ c en tiempo real.',
+                'Un ángulo "casi áureo" alinearía muchas semillas en radios rectos y desperdiciaría espacio.',
             },
           ],
           en: [
             {
               type: 'paragraph',
               content:
-                'Applying the change of variables z = −r·x + r/2 to the logistic map yields, after rescaling, the quadratic iteration z² + c with:',
+                'In a typical sunflower you see spirals in two directions: 34 and 55, 55 and 89, or 89 and 144 — always consecutive Fibonacci numbers. The Phyllotaxis panel reproduces it: with 377 seeds the 144/233 spirals appear.',
             },
             {
-              type: 'latex',
+              type: 'aside',
               content:
-                'c = \\frac{2r - r^2}{4} \\quad \\Longleftrightarrow \\quad r = 1 + \\sqrt{1 - 4c}',
-            },
-            {
-              type: 'paragraph',
-              content:
-                'This exact conjugacy means the logistic dynamics and the Mandelbrot real axis are the same under a change of coordinates. The laboratory shows the r ↔ c connector in real time.',
+                'An "almost golden" angle would align many seeds on straight radii and waste space.',
             },
           ],
         },
         keyPoints: {
           es: [
-            'c = (2r − r²)/4 es una conjugación exacta.',
-            'El conector r ↔ c es la "traducción" entre ambos mundos.',
+            'Los números de espirales son pares de Fibonacci consecutivos.',
+            'El ángulo áureo maximiza el empaquetado.',
           ],
           en: [
-            'c = (2r − r²)/4 is an exact conjugacy.',
-            'The r ↔ c connector is the "translation" between both worlds.',
+            'Spiral counts are consecutive Fibonacci pairs.',
+            'The golden angle maximises packing.',
           ],
         },
+        demo: { label: 'Filotaxis del girasol', styleId: 'sunflower', n: 377 },
       },
       {
         id: 'm5-l3',
-        title: {
-          es: 'El eje real como atlas de bifurcaciones',
-          en: 'The real axis as an atlas of bifurcations',
-        },
+        title: { es: 'Nautilus, piñas y romanesco', en: 'Nautilus, pinecones & romanesco' },
         intro: {
-          es: 'Cada disco de la Espiral Áurea es un ciclo límite cuadrático.',
-          en: 'Every bulb of the Golden Spiral is a quadratic limit cycle.',
+          es: 'Conchas, piñas y coliflores romanesco muestran la espiral áurea y los números de Fibonacci.',
+          en: 'Shells, pinecones and romanesco cauliflower show the golden spiral and Fibonacci numbers.',
         },
         blocks: {
           es: [
             {
               type: 'paragraph',
               content:
-                'El eje real de la Espiral Áurea es un mapa topológico de la duplicación de periodo: el cardioide principal corresponde a puntos fijos estables (periodo 1), el disco izquierdo a periodo 2, y cada disco más pequeño a periodos cada vez mayores.',
+                'La concha del nautilus crece en espira logarítmica (mismo ángulo en cada vuelta); la piña y el romanesco usan filotaxis con 8/13 o 13/21 espirales. El estilo "Concha Nautilus" del laboratorio genera esa espiral.',
             },
             {
-              type: 'paragraph',
-              content:
-                'Comprueba en el laboratorio: c = −0.75 (periodo 2), c = −1.25 (periodo 4), c = −1.401 (límite caótico) y c = −1.75 (ventana de periodo 3). Haz clic sobre el eje real para mover el sistema al punto exacto.',
+              type: 'latex',
+              content: 'r(\\theta) = a\\;e^{b\\theta}, \\qquad b = \\frac{\\ln\\varphi}{\\pi/2}',
             },
           ],
           en: [
             {
               type: 'paragraph',
               content:
-                'The Golden Spiral real axis is a topological map of period doubling: the main cardioid corresponds to stable fixed points (period 1), the left bulb to period 2, and each smaller bulb to larger and larger periods.',
+                'The nautilus shell grows in a logarithmic spiral (same angle each turn); pinecones and romanesco use phyllotaxis with 8/13 or 13/21 spirals. The lab’s "Nautilus shell" style generates that spiral.',
             },
             {
-              type: 'paragraph',
-              content:
-                'Check it in the laboratory: c = −0.75 (period 2), c = −1.25 (period 4), c = −1.401 (chaos threshold) and c = −1.75 (period-3 window). Click on the real axis to move the system to the exact point.',
+              type: 'latex',
+              content: 'r(\\theta) = a\\;e^{b\\theta}, \\qquad b = \\frac{\\ln\\varphi}{\\pi/2}',
             },
           ],
         },
         keyPoints: {
           es: [
-            'El eje real de la Espiral Áurea cartografía todas las bifurcaciones cuadráticas.',
-            'c = −0.75, −1.25, −1.401 y −1.75 son los hitos clave.',
+            'La espira mirabilis mantiene su forma al crecer.',
+            'Piñas y romanesco: pares de Fibonacci.',
           ],
           en: [
-            'The Golden Spiral real axis maps all quadratic bifurcations.',
-            'c = −0.75, −1.25, −1.401 and −1.75 are the key milestones.',
+            'The spira mirabilis keeps its shape as it grows.',
+            'Pinecones and romanesco: Fibonacci pairs.',
           ],
         },
-        demo: { modelId: 'logistic', r: 3.0, label: 'c = −0.75 (frontera periodo 1 → 2)' },
-        quiz: {
-          question: '¿Qué representa el punto c = −0.75 del eje real de Mandelbrot?',
-          options: [
-            { text: 'El límite exterior del conjunto', correct: false },
-            {
-              text: 'La frontera entre el cardioide y el disco de periodo 2 (primera bifurcación)',
-              correct: true,
-            },
-            { text: 'El centro exacto del conjunto', correct: false },
-            { text: 'Una región caótica total', correct: false },
-          ],
-          explanation:
-            'Con el isomorfismo, r = 3.0 corresponde a c = −0.75, el punto donde nace la duplicación de periodo 1 → 2.',
-        },
+        demo: { label: 'Concha Nautilus', styleId: 'nautilus', n: 233 },
       },
     ],
   },
   {
     id: 'm6',
-    icon: '🏭',
-    title: { es: 'Aplicaciones reales', en: 'Real-world applications' },
+    icon: '⭐',
+    title: { es: 'Pentagrama y aplicaciones', en: 'Pentagram & applications' },
     summary: {
-      es: 'De la teoría a la ingeniería, la ecología y la criptografía.',
-      en: 'From theory to engineering, ecology and cryptography.',
+      es: 'Pentágono estelar, mercados, música y telecomunicaciones.',
+      en: 'Star pentagon, markets, music and telecommunications.',
     },
     lessons: [
       {
         id: 'm6-l1',
-        title: { es: 'Convertidores de potencia', en: 'Power converters' },
+        title: { es: 'Pentágono y pentagrama', en: 'Pentagon and pentagram' },
         intro: {
-          es: 'Rizado caótico en convertidores DC–DC.',
-          en: 'Chaotic ripple in DC–DC converters.',
+          es: 'En el pentagrama, cada diagonal es φ veces el lado.',
+          en: 'In the pentagram, every diagonal is φ times the side.',
         },
         blocks: {
           es: [
             {
               type: 'paragraph',
               content:
-                'En convertidores conmutados (buck/boost) regulados por PWM, la corriente del inductor puede presentar duplicación de periodo al aumentar la ganancia del lazo de control. El rizado resultante es caótico y genera ruido electromagnético.',
+                'El triángulo 36°/72°/72° (triángulo áureo) aparece al unir los vértices del pentágono regular. Cada intersección de las diagonales divide la diagonal en razón áurea.',
             },
             {
-              type: 'paragraph',
+              type: 'latex',
               content:
-                'Comprender este régimen permite diseñar controladores que eviten las regiones caóticas o que las usen deliberadamente para reducir picos de conmutación.',
+                '\\frac{d}{l} = \\varphi, \\qquad \\text{ángulos del triángulo áureo: } 36°, 72°, 72°',
             },
           ],
           en: [
             {
               type: 'paragraph',
               content:
-                'In switched converters (buck/boost) regulated by PWM, the inductor current can undergo period doubling as the control-loop gain increases. The resulting ripple is chaotic and produces electromagnetic noise.',
+                'The 36°/72°/72° golden triangle appears when connecting the vertices of a regular pentagon. Each crossing divides a diagonal in the golden ratio.',
             },
             {
-              type: 'paragraph',
+              type: 'latex',
               content:
-                'Understanding this regime lets engineers design controllers that avoid chaotic regions or deliberately exploit them to reduce switching peaks.',
+                '\\frac{d}{l} = \\varphi, \\qquad \\text{golden triangle angles: } 36°, 72°, 72°',
             },
           ],
         },
         keyPoints: {
           es: [
-            'La ganancia del lazo puede inducir rizado caótico.',
-            'Los controladores deben evitar o dominar el caos.',
+            'La diagonal del pentágono es φ·lado.',
+            'El pentagrama era el símbolo de los pitagóricos.',
           ],
-          en: ['Loop gain can induce chaotic ripple.', 'Controllers must avoid or tame the chaos.'],
+          en: ['A pentagon diagonal is φ·side.', 'The pentagram was the Pythagoreans’ symbol.'],
         },
-        demo: { modelId: 'logistic', r: 3.57, label: 'Rizado caótico en convertidores' },
+        demo: { label: 'Pentagrama áureo', styleId: 'sunflower', n: 144 },
       },
       {
         id: 'm6-l2',
-        title: { es: 'Reactores químicos', en: 'Chemical reactors' },
+        title: { es: 'Mercados y diseño', en: 'Markets & design' },
         intro: {
-          es: 'Oscilaciones aperiódicas en reactores CSTR.',
-          en: 'Aperiodic oscillations in CSTR reactors.',
+          es: 'Retrocesos de Fibonacci y retículas áureas son aplicaciones modernas.',
+          en: 'Fibonacci retracements and golden grids are modern applications.',
         },
         blocks: {
           es: [
             {
               type: 'paragraph',
               content:
-                'Los reactores continuos de tanque agitado (CSTR) con reacciones autocatalíticas exotérmicas pueden oscilar de forma aperiódica: la concentración y la temperatura nunca se repiten exactamente.',
+                'En análisis técnico, los niveles 0.382, 0.5, 0.618 (1/φ) y 0.786 marcan posibles soportes. En diseño, la retícula 1:φ da jerarquía visual; el "número de oro" de la tipografía usa φ para tamaños.',
             },
             {
-              type: 'paragraph',
+              type: 'aside',
               content:
-                'El control de temperatura se vuelve crítico: en la región caótica, pequeñas perturbaciones se amplifican y el reactor puede abandonar el punto de operación seguro.',
+                'En mercados no hay causalidad probada: son niveles de consenso, no leyes físicas.',
             },
           ],
           en: [
             {
               type: 'paragraph',
               content:
-                'Continuous stirred-tank reactors (CSTR) with exothermic autocatalytic reactions can oscillate aperiodically: concentration and temperature never repeat exactly.',
+                'In technical analysis, levels 0.382, 0.5, 0.618 (1/φ) and 0.786 mark probable support. In design, the 1:φ grid gives visual hierarchy; typographic "golden numbers" use φ for sizes.',
             },
             {
-              type: 'paragraph',
+              type: 'aside',
               content:
-                'Temperature control becomes critical: in the chaotic region, small perturbations are amplified and the reactor can leave its safe operating point.',
+                'In markets there is no proven causality: they are consensus levels, not physical laws.',
             },
           ],
         },
         keyPoints: {
-          es: [
-            'CSTR autocatalítico ⇒ oscilaciones aperiódicas.',
-            'El control debe evitar la región caótica.',
-          ],
-          en: [
-            'Autocatalytic CSTR ⇒ aperiodic oscillations.',
-            'Control must avoid the chaotic region.',
-          ],
+          es: ['1/φ ≈ 0.618 es el retroceso central.', 'φ como herramienta heurística, no ley.'],
+          en: ['1/φ ≈ 0.618 is the core retracement.', 'φ as a heuristic tool, not a law.'],
         },
       },
       {
         id: 'm6-l3',
-        title: { es: 'Vibraciones y poblaciones', en: 'Vibrations & populations' },
+        title: { es: 'Música y telecom', en: 'Music & telecom' },
         intro: {
-          es: 'Duffing y Ricker: la misma fenomenología en mecánica y ecología.',
-          en: 'Duffing and Ricker: the same phenomenology in mechanics and ecology.',
+          es: 'Escalas, sonificación y antenas que escalan en φ.',
+          en: 'Scales, sonification and antennas that scale by φ.',
         },
         blocks: {
           es: [
             {
               type: 'paragraph',
               content:
-                'El oscilador de Duffing (mecánica estructural) y el mapa de Ricker (ecología) comparten la firma del caos: bifurcaciones, ventanas periódicas y sensibilidad a las condiciones iniciales.',
-            },
-            {
-              type: 'paragraph',
-              content:
-                'Para poblaciones con alta tasa de reproducción, el modelo de Ricker predice fluctuaciones extremas que aumentan el riesgo de colapso ecológico. La teoría del caos explica por qué algunas poblaciones fluctúan de forma irregular sin una causa externa.',
-            },
-          ],
-          en: [
-            {
-              type: 'paragraph',
-              content:
-                'The Duffing oscillator (structural mechanics) and the Ricker map (ecology) share the fingerprint of chaos: bifurcations, periodic windows and sensitivity to initial conditions.',
-            },
-            {
-              type: 'paragraph',
-              content:
-                'For populations with a high reproduction rate, the Ricker model predicts extreme fluctuations that increase the risk of ecological collapse. Chaos theory explains why some populations fluctuate irregularly with no external cause.',
-            },
-          ],
-        },
-        keyPoints: {
-          es: [
-            'Duffing y Ricker comparten la firma del caos.',
-            'Alta fecundidad ⇒ fluctuaciones extremas y riesgo de colapso.',
-          ],
-          en: [
-            'Duffing and Ricker share chaos fingerprint.',
-            'High fecundity ⇒ extreme fluctuations and collapse risk.',
-          ],
-        },
-      },
-      {
-        id: 'm6-l4',
-        title: { es: 'Criptografía y óptica', en: 'Cryptography & optics' },
-        intro: {
-          es: 'El caos como fuente de entropía y modulación.',
-          en: 'Chaos as a source of entropy and modulation.',
-        },
-        blocks: {
-          es: [
-            {
-              type: 'paragraph',
-              content:
-                'La sensibilidad extrema del caos se usa en criptografía: generadores pseudoaleatorios (PRNG) basados en mapas caóticos producen secuencias impredecibles para cifrado. En óptica, la modulación no lineal de fase en fibras introduce jitter que debe modelarse.',
-            },
-            {
-              type: 'paragraph',
-              content:
-                'En el laboratorio, el mapa de Bernoulli r·x mod 1 es el ejemplo canónico: secuencias binarias con entropía máxima para aplicaciones criptográficas.',
-            },
-          ],
-          en: [
-            {
-              type: 'paragraph',
-              content:
-                'The extreme sensitivity of chaos is used in cryptography: pseudorandom generators (PRNGs) based on chaotic maps produce unpredictable sequences for encryption. In optics, nonlinear phase modulation in fibers introduces jitter that must be modeled.',
-            },
-            {
-              type: 'paragraph',
-              content:
-                'In the laboratory, the Bernoulli map r·x mod 1 is the canonical example: binary sequences with maximum entropy for cryptographic applications.',
-            },
-          ],
-        },
-        keyPoints: {
-          es: [
-            'PRNGs caóticos: secuencias impredecibles para cifrado.',
-            'El mapa de Bernoulli es el ejemplo canónico de máxima entropía.',
-          ],
-          en: [
-            'Chaotic PRNGs: unpredictable sequences for encryption.',
-            'The Bernoulli map is the canonical maximum-entropy example.',
-          ],
-        },
-        demo: { modelId: 'bernoulli', r: 2.0, label: 'Mapa de Bernoulli (duplicador)' },
-      },
-    ],
-  },
-  // ═══════════════════════════════════════════════════════════════════
-  // MODULE 7 — Las Matemáticas Suena (connects with Sonifier)
-  // ═══════════════════════════════════════════════════════════════════
-  {
-    id: 'm7',
-    icon: '🎵',
-    title: { es: 'Las Matemáticas Suena', en: 'Mathematics Sounds' },
-    summary: {
-      es: 'Cómo las dinámicas no lineales generan melodías y por qué el caos suena diferente al orden.',
-      en: 'How nonlinear dynamics generates melodies and why chaos sounds different from order.',
-    },
-    lessons: [
-      {
-        id: 'm7-l1',
-        title: { es: 'Órbitas que generan melodías', en: 'Orbits that generate melodies' },
-        intro: {
-          es: 'Al mapear los valores de la órbita a notas musicales, la matemática se convierte en música.',
-          en: 'When orbit values are mapped to musical notes, mathematics becomes music.',
-        },
-        blocks: {
-          es: [
-            {
-              type: 'paragraph',
-              content:
-                'El laboratorio sonifica la órbita del mapa activo: cada valor xₙ se cuantiza a una nota musical de la escala seleccionada (pentatónica menor, menor natural, lidio, etc.). La frecuencia se calcula a partir de la posición de la nota en la escala dentro de un rango de 2-3 octavas.',
+                'Sonifica la convergencia: los ratios F(n)/F(n−1) de 2.0 → 1.618 se estabilizan en un tono único (el "sonido de φ"). Las antenas log-periódicas escalan sus elementos por una razón constante cercana a φ para cubrir ancho de banda.',
             },
             {
               type: 'latex',
-              content:
-                'f = f_0 \\cdot 2^{\\frac{s + 12 \\cdot \\text{oct}}{12}} \\qquad f_0 = 220\\text{ Hz (La}_3\\text{)}',
-            },
-            {
-              type: 'paragraph',
-              content:
-                'En régimen estable (λ < 0), la órbita se repite → la melodía se repite cíclicamente. En período 2, alternan 2 notas; en período 3, 3 notas que forman un arpegio. En caos, la secuencia es aperiódica: suena como improvisación.',
-            },
-            {
-              type: 'aside',
-              content:
-                'Prueba en el laboratorio: activa la sonificación y desplaza r entre 3.2 (período 2, melodía estable), 3.83 (período 3, arpegio) y 3.9 (caos, improvisación). Escucha el contraste.',
+              content: 'f_{n+1} \\approx \\varphi\\, f_n \\quad\\text{(antena log-periódica)}',
             },
           ],
           en: [
             {
               type: 'paragraph',
               content:
-                "The laboratory sonifies the active map's orbit: each xₙ value is quantized to a note in the selected scale (pentatonic minor, natural minor, lydian, etc.). Frequency is calculated from the note's position in the scale within a 2-3 octave range.",
+                'Sonify the convergence: the ratios F(n)/F(n−1) from 2.0 → 1.618 stabilise on a single pitch (the "sound of φ"). Log-periodic antennas scale their elements by a constant ratio close to φ to cover bandwidth.',
             },
             {
               type: 'latex',
-              content:
-                'f = f_0 \\cdot 2^{\\frac{s + 12 \\cdot \\text{oct}}{12}} \\qquad f_0 = 220\\text{ Hz (A}_3\\text{)}',
-            },
-            {
-              type: 'paragraph',
-              content:
-                'In stable regime (λ < 0), the orbit repeats → the melody repeats cyclically. In period-2, 2 notes alternate; in period-3, 3 notes form an arpeggio. In chaos, the sequence is aperiodic: it sounds like improvisation.',
-            },
-            {
-              type: 'aside',
-              content:
-                'Try it in the lab: enable sonification and sweep r between 3.2 (period 2, stable melody), 3.83 (period 3, arpeggio), and 3.9 (chaos, improvisation).',
+              content: 'f_{n+1} \\approx \\varphi\\, f_n \\quad\\text{(log-periodic antenna)}',
             },
           ],
         },
         keyPoints: {
           es: [
-            'La cuantización de la órbita a notas musicales crea melodías que reflejan la dinámica.',
-            'Régimen estable = melodía cíclica; período = arpegio; caos = improvisación.',
-            'La escala pentatónica menor suena suave; la cromática, densa y disonante.',
+            'La sonificación hace audible la convergencia a φ.',
+            'Las antenas log-periódicas escalan ≈ φ.',
           ],
           en: [
-            'Quantizing the orbit to musical notes creates melodies reflecting the dynamics.',
-            'Stable regime = cyclic melody; period = arpeggio; chaos = improvisation.',
-            'Minor pentatonic sounds smooth; chromatic sounds dense and dissonant.',
+            'Sonification makes the convergence to φ audible.',
+            'Log-periodic antennas scale ≈ φ.',
           ],
-        },
-        demo: { modelId: 'logistic', r: 3.2, label: 'Período 2 — melodía estable' },
-        quiz: {
-          question: '¿Qué suena al cuantizar la órbita logística en r = 3.9 (caos)?',
-          options: [
-            { text: 'Una melodía cíclica que se repite cada 2 notas', correct: false },
-            { text: 'Un arpegio de 3 notas que se repite', correct: false },
-            {
-              text: 'Una secuencia aperiódica que suena como improvisación caótica',
-              correct: true,
-            },
-            { text: 'Silencio porque la órbita diverge', correct: false },
-          ],
-          explanation:
-            'Con λ > 0, la órbita es aperiódica. Al cuantizar cada valor a una nota, la secuencia musical también es aperiódica, sonando como improvisación caótica.',
-        },
-      },
-      {
-        id: 'm7-l2',
-        title: {
-          es: 'El contraste caos-orden por el sonido',
-          en: 'The chaos-order contrast through sound',
-        },
-        intro: {
-          es: 'El sonido hace palpable el contraste entre orden y caos: es una experiencia auditiva de la sensibilidad a condiciones iniciales.',
-          en: 'Sound makes the contrast between order and chaos tangible: an auditory experience of sensitivity to initial conditions.',
-        },
-        blocks: {
-          es: [
-            {
-              type: 'paragraph',
-              content:
-                'La sonificación usa un sintetizador de piano realista con 5 armónicos y envolvente ADSR. El volumen varía con el exponente de Lyapunov: en órbitas estables (λ < -0.5) suena en piano suave; en caos (λ > 0.05) suena en forte.',
-            },
-            {
-              type: 'paragraph',
-              content:
-                'Esta diferencia dinámica hace que el contraste entre orden y caos se oiga como contraste musical: suave vs. intenso, predecible vs. inesperado. El estudiante puede cerrar los ojos y distinguir los regímenes solo por el sonido.',
-            },
-          ],
-          en: [
-            {
-              type: 'paragraph',
-              content:
-                'The sonification uses a realistic piano synthesizer with 5 harmonics and an ADSR envelope. Volume varies with the Lyapunov exponent: stable orbits (λ < -0.5) play softly; chaos (λ > 0.05) plays forte.',
-            },
-            {
-              type: 'paragraph',
-              content:
-                'This dynamic contrast makes the chaos-order contrast audible: soft vs intense, predictable vs unpredictable. Students can close their eyes and distinguish regimes by sound alone.',
-            },
-          ],
-        },
-        keyPoints: {
-          es: [
-            'El volumen se modula con λ: piano en órbitas estables, forte en caos.',
-            'El contraste sonoro refuerza la comprensión intuitiva de la sensibilidad a C.I.',
-            'Se puede distinguir el régimen solo con el oído.',
-          ],
-          en: [
-            'Volume modulates with λ: piano for stable orbits, forte for chaos.',
-            'Sound contrast reinforces intuitive understanding of sensitivity to initial conditions.',
-            'The regime can be distinguished by ear alone.',
-          ],
-        },
-        demo: { modelId: 'logistic', r: 3.5, label: 'Transición caos ↔ orden' },
-      },
-      {
-        id: 'm7-l3',
-        title: {
-          es: 'Escalas musicales y dinámica no lineal',
-          en: 'Musical scales and nonlinear dynamics',
-        },
-        intro: {
-          es: 'Cada escala musical crea un color sonoro diferente para la misma dinámica, revelando aspectos distintos del comportamiento caótico.',
-          en: 'Each musical scale creates a different sound-color for the same dynamics, revealing distinct aspects of chaotic behavior.',
-        },
-        blocks: {
-          es: [
-            {
-              type: 'paragraph',
-              content:
-                'El laboratorio ofrece 8 escalas: pentatónica menor (suave), menor natural (clásico), lidio (etéreo), blues (soul), cromática (densa) y acordes de piano. Cada una mapea los valores de la órbita a notas diferentes, generando melodías distintas.',
-            },
-            {
-              type: 'paragraph',
-              content:
-                'Los presets de estilo (Melancólica de Einaudi, Clásica de Beethoven, Serenata de Debussy) combinan escala + tempo + timbre para evocar el carácter de cada compositor. En período 3, la cuantización produce notas que recuerdan el tema principal de "Für Elise" de Beethoven.',
-            },
-            {
-              type: 'aside',
-              content:
-                'Experimenta: selecciona "Lidio" en el laboratorio y compara con "Cromática" en la misma órbita. El lidio suena etéreo y luminoso; el cromático su denso y tenso.',
-            },
-          ],
-          en: [
-            {
-              type: 'paragraph',
-              content:
-                'The laboratory offers 8 scales: minor pentatonic (smooth), natural minor (classical), lydian (ethereal), blues (soul), chromatic (dense) and piano chords. Each maps orbit values to different notes, generating different melodies.',
-            },
-            {
-              type: 'paragraph',
-              content:
-                'Style presets (Einaudi Melancholy, Beethoven Classical, Debussy Serenade) combine scale + tempo + timbre to evoke each composer\'s character. In period 3, quantization produces notes reminiscent of "Für Elise."',
-            },
-            {
-              type: 'aside',
-              content:
-                'Experiment: select "Lydian" in the lab and compare with "Chromatic" on the same orbit. Lydian sounds ethereal and luminous; chromatic sounds dense and tense.',
-            },
-          ],
-        },
-        keyPoints: {
-          es: [
-            'Cada escala musical crea un color sonoro diferente para la misma dinámica.',
-            'Los presets de estilo combinan escala + tempo + timbre para evocar compositores.',
-            'La música refleja la estructura matemática subyacente de la órbita.',
-          ],
-          en: [
-            'Each musical scale creates a different sound-color for the same dynamics.',
-            'Style presets combine scale + tempo + timbre to evoke composers.',
-            'The music reflects the underlying mathematical structure of the orbit.',
-          ],
-        },
-        takeaway: {
-          es: 'La música y las matemáticas comparten la misma estructura: patrones, repeticiones, variaciones y rupturas. Las escalas musicales son a los mapas dinámicos lo que las paletas de color son a los fractales.',
-          en: 'Music and mathematics share the same structure: patterns, repetitions, variations, and ruptures. Musical scales are to dynamic maps what color palettes are to fractals.',
-        },
-        demo: { modelId: 'logistic', r: 3.83, label: 'Período 3 — suena a "Für Elise"' },
-        quiz: {
-          question: '¿Qué preset de estilo suena más parecido a la música de Einaudi?',
-          options: [
-            { text: 'Clásica (Beethoven) — menor natural, rápido', correct: false },
-            {
-              text: 'Melancólica (Einaudi) — menor natural, tempo medio, timbre cálido',
-              correct: true,
-            },
-            { text: 'Serenata (Debussy) — lidio, lento, suave', correct: false },
-            { text: 'Ninguno se parece', correct: false },
-          ],
-          explanation:
-            'El preset "Melancólica (Einaudi)" usa la escala menor natural con tempo medio (140ms) y timbre cálido (warmth 0.6), evocando el estilo melancólico y contemplativo de Einaudi.',
         },
       },
     ],
@@ -1378,138 +892,63 @@ export const MODULES: Module[] = [
 
 export const GLOSSARY: GlossaryTerm[] = [
   {
-    term: 'Mapa iterado',
-    es: 'Función que transforma un estado en el siguiente: x_{n+1} = f(x_n).',
-    en: 'A function that maps a state to the next one: x_{n+1} = f(x_n).',
+    term: 'Sucesión de Fibonacci',
+    es: '0, 1, 1, 2, 3, 5, 8, 13… donde cada término suma los dos anteriores.',
+    en: '0, 1, 1, 2, 3, 5, 8, 13… where each term sums the previous two.',
   },
   {
-    term: 'Órbita',
-    es: 'Sucesión de estados generada al iterar el mapa desde una condición inicial.',
-    en: 'The sequence of states generated by iterating the map from an initial condition.',
+    term: 'φ (número áureo)',
+    es: 'La razón (1+√5)/2 ≈ 1.61803… que satisface φ² = φ + 1.',
+    en: 'The ratio (1+√5)/2 ≈ 1.61803… satisfying φ² = φ + 1.',
   },
   {
-    term: 'Punto fijo',
-    es: 'Estado x* tal que f(x*) = x*.',
-    en: 'A state x* such that f(x*) = x*.',
+    term: 'Ángulo áureo',
+    es: '360°/φ² ≈ 137.508°, la divergencia óptima entre primordios.',
+    en: '360°/φ² ≈ 137.508°, the optimal divergence between primordia.',
   },
   {
-    term: 'Atractor',
-    es: 'Conjunto hacia el que converge la órbita a largo plazo.',
-    en: 'The set the orbit converges to in the long run.',
+    term: 'Rectángulo áureo',
+    es: 'Rectángulo de lados 1 y φ; al quitar un cuadrado conserva la proporción.',
+    en: 'Rectangle of sides 1 and φ; removing a square keeps the proportion.',
   },
   {
-    term: 'Periodo',
-    es: 'Número de estados distintos que se repiten en un ciclo.',
-    en: 'The number of distinct states that repeat in a cycle.',
+    term: 'Espiral áurea',
+    es: 'Espiral logarítmica de razón φ; en su límite, la espira mirabilis.',
+    en: 'Logarithmic spiral of ratio φ; in the limit, the spira mirabilis.',
   },
   {
-    term: 'Bifurcación',
-    es: 'Cambio cualitativo de la dinámica al variar un parámetro.',
-    en: 'A qualitative change of the dynamics as a parameter varies.',
+    term: 'Fórmula de Binet',
+    es: 'F(n) = (φⁿ − ψⁿ)/√5, solución cerrada de la recurrencia.',
+    en: 'F(n) = (φⁿ − ψⁿ)/√5, closed-form solution of the recurrence.',
   },
   {
-    term: 'Duplicación de periodo',
-    es: 'Ruta al caos en la que cada ciclo se duplica (2 → 4 → 8 → …).',
-    en: 'The route to chaos where each cycle doubles (2 → 4 → 8 → …).',
+    term: 'Números de Lucas',
+    es: 'Sucesión con la misma recurrencia, inicios 2 y 1: 2,1,3,4,7,11…',
+    en: 'Sequence with the same recurrence, starts 2 and 1: 2,1,3,4,7,11…',
   },
   {
-    term: 'Constante de Feigenbaum',
-    es: 'δ ≈ 4.6692: razón universal de intervalos entre bifurcaciones.',
-    en: 'δ ≈ 4.6692: universal ratio of intervals between bifurcations.',
+    term: 'Zeckendorf',
+    es: 'Todo entero se escribe de forma única como suma de Fibonacci no consecutivos.',
+    en: 'Every integer is uniquely a sum of non-consecutive Fibonacci numbers.',
   },
   {
-    term: 'Exponente de Lyapunov',
-    es: 'Mide la divergencia exponencial de órbitas vecinas; λ > 0 indica caos.',
-    en: 'Measures the exponential divergence of nearby orbits; λ > 0 indicates chaos.',
+    term: 'Filotaxis',
+    es: 'Disposición de hojas/semillas; con el ángulo áureo maximiza el empaquetado.',
+    en: 'Leaves/seeds arrangement; with the golden angle it maximises packing.',
   },
   {
-    term: 'Caos determinista',
-    es: 'Comportamiento aperiódico y sensible a condiciones iniciales en un sistema determinista.',
-    en: 'Aperiodic, initial-condition-sensitive behavior in a deterministic system.',
+    term: 'Fracción continua',
+    es: 'Expresión de un número como [a₀; a₁, a₂, …]. Para φ: [1;1,1,1,…].',
+    en: 'Expression of a number as [a₀; a₁, a₂, …]. For φ: [1;1,1,1,…].',
   },
   {
-    term: 'Efecto mariposa',
-    es: 'Amplificación exponencial de diferencias iniciales diminutas.',
-    en: 'Exponential amplification of tiny initial differences.',
+    term: 'Retroceso de Fibonacci',
+    es: 'Niveles de soporte/resistencia en trading basados en 0.382, 0.5, 0.618…',
+    en: 'Trading support/resistance levels based on 0.382, 0.5, 0.618…',
   },
   {
-    term: 'Conjunto de Mandelbrot',
-    es: 'Puntos c del plano complejo cuya órbita desde z₀ = 0 no escapa al iterar z² + c.',
-    en: 'Complex c points whose orbit from z₀ = 0 does not escape when iterating z² + c.',
-  },
-  {
-    term: 'Ventana periódica',
-    es: 'Intervalo de parámetros con dinámica periódica dentro de una región caótica.',
-    en: 'A parameter interval with periodic dynamics inside a chaotic region.',
-  },
-  {
-    term: 'Isomorfismo',
-    es: 'Correspondencia que preserva la dinámica entre dos sistemas.',
-    en: 'A correspondence that preserves the dynamics between two systems.',
-  },
-  {
-    term: 'Mapa unimodal',
-    es: 'Función con un único máximo en el intervalo (como la campana del logístico).',
-    en: 'A function with a single maximum on the interval (like the logistic bell).',
-  },
-  {
-    term: 'Atractor extraño',
-    es: 'Conjunto fractal hacia el que convergen las órbitas en sistemas caóticos, con dimensión fraccionaria.',
-    en: 'A fractal set toward which orbits converge in chaotic systems, with fractional dimension.',
-  },
-  {
-    term: 'Entropía topológica',
-    es: 'Medida de la complejidad de la dinámica: cuánta información se pierde al observar el sistema a baja resolución.',
-    en: 'Measure of dynamical complexity: how much information is lost observing the system at low resolution.',
-  },
-  {
-    term: 'Conjugación topológica',
-    es: 'Homeomorfismo que conjugá dos mapas dinámicos, preservando su estructura orbital.',
-    en: 'A homeomorphism conjugating two dynamical maps, preserving their orbital structure.',
-  },
-  {
-    term: 'Bifurcación de flip',
-    es: 'Transición donde un punto fijo estable se vuelve inestable y nace un ciclo de periodo 2 (el punto fijo "da un vuelco").',
-    en: 'Transition where a stable fixed point becomes unstable and a period-2 cycle is born (the fixed point "flips").',
-  },
-  {
-    term: 'Transitorio',
-    es: 'Fase inicial de la órbita antes de que el sistema se establezca en su comportamiento a largo plazo.',
-    en: 'The initial phase of the orbit before the system settles into its long-term behavior.',
-  },
-  {
-    term: 'Resolución de fase',
-    es: 'Espacio multidimensional (xₙ, xₙ₊₁, xₙ₊₂, …) que revela la geometría del atractor.',
-    en: 'Multidimensional space revealing the geometry of the attractor.',
-  },
-  {
-    term: 'Sensibilidad a parámetros',
-    es: 'Cambio cualitativo abrupto de la dinámica ante una tiny variación del parámetro r.',
-    en: 'Abrupt qualitative change in dynamics upon a tiny variation of parameter r.',
-  },
-  {
-    term: 'Modo musical',
-    es: 'Conjunto de notas que define el "color sonoro" al mapear la órbita a frecuencias.',
-    en: 'Set of notes defining the "sound-color" when mapping the orbit to frequencies.',
-  },
-  {
-    term: 'Armadónico',
-    es: 'Componente de frecuencia que no es exactamente múltiplo de la fundamental (como en las cuerdas de piano reales).',
-    en: 'A frequency component that is not an exact integer multiple of the fundamental (like real piano strings).',
-  },
-  {
-    term: 'Envolvente ADSR',
-    es: 'Perfil temporal del volumen de una nota: Ataque, Decaimiento, Sostenimiento, Liberación.',
-    en: 'Temporal volume profile of a note: Attack, Decay, Sustain, Release.',
-  },
-  {
-    term: 'Sensibilidad a C.I.',
-    es: 'Propiedad del caos: dos condiciones iniciales infinitesimalmente cercanas evolucionan exponencialmente lejos.',
-    en: 'A property of chaos: two infinitesimally close initial conditions evolve exponentially far apart.',
+    term: 'Espira mirabilis',
+    es: 'Espiral logarítmica que no cambia de forma al crecer; aproximada por el nautilus.',
+    en: 'Logarithmic spiral that keeps its shape while growing; approximated by the nautilus.',
   },
 ];
-
-/** Convenience accessors used by the Learn view. */
-export function getModule(id: string): Module | undefined {
-  return MODULES.find((m) => m.id === id);
-}

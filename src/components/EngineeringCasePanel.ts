@@ -1,11 +1,11 @@
-import { ENGINEERING_CASES, generateEngineeringSignal } from '../math/engineeringCases.js';
+import { ENGINEERING_CASES, generateGoldenSignal } from '../math/engineeringCases.js';
 import type { EngineeringCase } from '../math/engineeringCases.js';
 import { renderLatex } from '../math/latexHelper.js';
 import { viz } from '../core/theme.js';
 
-/** Panel of real engineering applications with a synthetic waveform preview. */
+/** Panel of real applications of the golden ratio with a synthetic preview. */
 export class EngineeringCasePanel {
-  private onSelectModelAndR: (modelId: string, targetR: number) => void;
+  private onSelectStyleAndN: (styleId: string, n: number) => void;
 
   private titleEl: HTMLElement | null;
   private subtitleEl: HTMLElement | null;
@@ -15,8 +15,8 @@ export class EngineeringCasePanel {
   private canvas: HTMLCanvasElement | null;
   private ctx: CanvasRenderingContext2D | null;
 
-  constructor(onSelectModelAndR: (modelId: string, targetR: number) => void) {
-    this.onSelectModelAndR = onSelectModelAndR;
+  constructor(onSelectStyleAndN: (styleId: string, n: number) => void) {
+    this.onSelectStyleAndN = onSelectStyleAndN;
 
     this.titleEl = document.getElementById('eng-title');
     this.subtitleEl = document.getElementById('eng-subtitle');
@@ -28,7 +28,7 @@ export class EngineeringCasePanel {
     this.ctx = this.canvas ? this.canvas.getContext('2d') : null;
 
     this.initEvents();
-    this.selectCase('electrical');
+    this.selectCase('architecture');
   }
 
   private initEvents(): void {
@@ -57,7 +57,7 @@ export class EngineeringCasePanel {
 
     this.renderSignal(caseData);
 
-    this.onSelectModelAndR(caseData.modelId, caseData.targetR);
+    this.onSelectStyleAndN(caseData.styleId, caseData.n);
   }
 
   private renderSignal(caseData: EngineeringCase): void {
@@ -72,7 +72,6 @@ export class EngineeringCasePanel {
     this.canvas.height = Math.floor(cssHeight * dpr);
     this.canvas.style.width = `${cssWidth}px`;
     this.canvas.style.height = `${cssHeight}px`;
-    this.ctx.imageSmoothingEnabled = true;
 
     const width = this.canvas.width;
     const height = this.canvas.height;
@@ -83,8 +82,7 @@ export class EngineeringCasePanel {
 
     this.ctx.strokeStyle = colors.grid;
     this.ctx.lineWidth = 1 * dpr;
-    const gridStepX = 50 * dpr;
-    for (let x = 0; x < width; x += gridStepX) {
+    for (let x = 0; x < width; x += 50 * dpr) {
       this.ctx.beginPath();
       this.ctx.moveTo(x, 0);
       this.ctx.lineTo(x, height);
@@ -92,7 +90,7 @@ export class EngineeringCasePanel {
     }
 
     const sampleCount = Math.floor(cssWidth * 1.5);
-    const points = generateEngineeringSignal(caseData.id, sampleCount, caseData.targetR);
+    const points = generateGoldenSignal(caseData.id, sampleCount, caseData.n);
 
     this.ctx.beginPath();
     for (let i = 0; i < points.length; i++) {
@@ -103,9 +101,9 @@ export class EngineeringCasePanel {
       else this.ctx.lineTo(px, py);
     }
 
-    this.ctx.strokeStyle = colors.cyan;
+    this.ctx.strokeStyle = colors.amber;
     this.ctx.lineWidth = 2.5 * dpr;
-    this.ctx.shadowColor = colors.cyan;
+    this.ctx.shadowColor = colors.amber;
     this.ctx.shadowBlur = 10 * dpr;
     this.ctx.stroke();
     this.ctx.shadowBlur = 0;

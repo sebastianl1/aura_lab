@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://sebastianl1.github.io/Fractalab/sitemap.xml
+Sitemap: https://sebastianl1.github.io/aura_lab/sitemap.xml

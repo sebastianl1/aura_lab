@@ -4,7 +4,7 @@
  * Everything is decorative (aria-hidden) and disabled under reduced motion.
  */
 
-const GLYPH_SET = ['∑', '∫', 'π', '∞', 'λ', '∂', 'φ', '√'];
+const GLYPH_SET = ['φ', '∑', 'π', '∞', 'F', '∂', 'φ', '√'];
 
 export function initOrrery(): void {
   const ambient = document.querySelector<HTMLElement>('.ambient-bg');

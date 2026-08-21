@@ -6,11 +6,11 @@ import { i18n } from '../core/i18n.js';
 /** Renders the "Aprende" tab: modules, lessons, quizzes and glossary. */
 export class LearnView {
   private container: HTMLElement;
-  private onOpenDemo: (modelId: string, r: number) => void;
+  private onOpenDemo: (styleId: string, n: number) => void;
   private activeModuleId: string | null = null;
   private showGlossary = false;
 
-  constructor(container: HTMLElement, onOpenDemo: (modelId: string, r: number) => void) {
+  constructor(container: HTMLElement, onOpenDemo: (styleId: string, n: number) => void) {
     this.container = container;
     this.onOpenDemo = onOpenDemo;
   }
@@ -131,7 +131,7 @@ export class LearnView {
     const keyPoints = lesson.keyPoints[lang].map((k) => `<li>${this.esc(k)}</li>`).join('');
     const demo = lesson.demo
       ? `
-        <button class="btn btn-accent learn-demo-btn" data-demo-model="${lesson.demo.modelId}" data-demo-r="${lesson.demo.r}">
+        <button class="btn btn-accent learn-demo-btn" data-demo-style="${lesson.demo.styleId}" data-demo-n="${lesson.demo.n}">
           🧪 ${i18n.t('learn.openLab')}: ${this.esc(lesson.demo.label)}
         </button>
       `
@@ -158,11 +158,11 @@ export class LearnView {
       renderLatex(el, el.dataset.latex ?? '', true);
     });
 
-    bodyEl.querySelector<HTMLElement>('[data-demo-model]')?.addEventListener('click', (e) => {
+    bodyEl.querySelector<HTMLElement>('[data-demo-style]')?.addEventListener('click', (e) => {
       const target = e.currentTarget as HTMLElement;
-      const modelId = target.dataset.demoModel;
-      const r = parseFloat(target.dataset.demoR ?? '3.0');
-      if (modelId) this.onOpenDemo(modelId, r);
+      const styleId = target.dataset.demoStyle;
+      const n = parseInt(target.dataset.demoN ?? '233', 10);
+      if (styleId) this.onOpenDemo(styleId, n);
     });
 
     if (lesson.quiz) this.bindQuizEvents(bodyEl);

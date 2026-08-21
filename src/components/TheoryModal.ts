@@ -1,6 +1,7 @@
 import { renderLatex } from '../math/latexHelper.js';
+import { PHI } from '../math/fibonacci.js';
 
-/** Modal with the pedagogical theory behind the orbit ↔ Golden Spiral isomorphism. */
+/** Modal with the pedagogical theory of the golden ratio and φ. */
 export class TheoryModal {
   private modal: HTMLElement;
   private backdrop: HTMLElement;
@@ -22,16 +23,17 @@ export class TheoryModal {
   }
 
   private renderLatexContent(): void {
-    const feigenbaumEl = document.getElementById('latex-feigenbaum-delta');
-    const mandelbrotSliceEl = document.getElementById('latex-mandelbrot-slice');
-    const isoProofEl = document.getElementById('latex-iso-proof');
+    const phiEl = document.getElementById('latex-phi');
+    const angleEl = document.getElementById('latex-angle');
+    const binetEl = document.getElementById('latex-iso-proof');
 
-    if (feigenbaumEl) renderLatex(feigenbaumEl, '\\delta \\approx 4.669201609102990');
-    if (mandelbrotSliceEl) renderLatex(mandelbrotSliceEl, 'c \\in [-2, 0.25]');
-    if (isoProofEl)
+    if (phiEl) renderLatex(phiEl, `\\varphi = \\frac{1+\\sqrt{5}}{2} \\approx ${PHI.toFixed(10)}`);
+    if (angleEl)
+      renderLatex(angleEl, '\\text{ángulo áureo} = \\frac{360°}{\\varphi^2} \\approx 137.50776°');
+    if (binetEl)
       renderLatex(
-        isoProofEl,
-        'c = \\frac{2r - r^2}{4} \\quad \\Longleftrightarrow \\quad r = 1 + \\sqrt{1 - 4c}',
+        binetEl,
+        'F(n) = \\frac{\\varphi^n - \\psi^n}{\\sqrt{5}}, \\qquad \\psi = \\frac{1-\\sqrt{5}}{2}, \\qquad \\frac{F(n+1)}{F(n)} \\to \\varphi',
         true,
       );
   }

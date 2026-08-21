@@ -39,8 +39,8 @@ export class ResourcesView {
         <p class="resources-read-more">
           ${
             lang === 'es'
-              ? 'La base conceptual de Aura Lab es la proporción áurea y la dinámica no lineal de las órbitas, de Fibonacci a Lorenz (1963).'
-              : 'The conceptual foundation of Aura Lab is the golden ratio and the nonlinear dynamics of orbits, from Fibonacci to Lorenz (1963).'
+              ? 'La base conceptual de Aura Lab va del Liber Abaci (1202) a la filotaxis y la geometría áurea moderna, pasando por Binet y Zeckendorf.'
+              : 'The conceptual foundation of Aura Lab runs from the Liber Abaci (1202) to phyllotaxis and modern golden geometry, through Binet and Zeckendorf.'
           }
         </p>
       </div>

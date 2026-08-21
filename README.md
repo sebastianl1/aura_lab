@@ -1,4 +1,4 @@
-# λ Aura Lab Sl: Bifurcaciones ↔ Espiral Áurea Explorer
+# φ Aura Lab — Sucesión de Fibonacci & Razón Áurea
 
 [![Vite](https://img.shields.io/badge/Vite-8-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-6-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
@@ -6,53 +6,86 @@
 [![Vitest](https://img.shields.io/badge/Vitest-4-green?style=for-the-badge&logo=vitest&logoColor=white)](https://vitest.dev/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
-**Aura Lab Sl** es un **Laboratorio Virtual Interactivo** de la proporción
-áurea, la sucesión de Fibonacci y la Espiral Áurea como atlas de las órbitas
-cuadráticas, diseñado para educación superior e ingeniería. Bilingüe (ES/EN) y
-desplegable como PWA ligera en GitHub Pages.
+**Aura Lab** es un **Laboratorio Virtual Interactivo** dedicado a la sucesión
+de Fibonacci y al número áureo **φ = (1+√5)/2 ≈ 1.618**. Explora la filotaxis
+del girasol, la espiral áurea, la fórmula de Binet y el teorema de Zeckendorf
+con visualizaciones en vivo, bilingüe (ES/EN) y desplegable como PWA ligera en
+GitHub Pages.
 
-> Hecho por **Sebastián Laguna**
+> Hecho por **Sebastián Laguna** — [ver en vivo](https://sebastianl1.github.io/aura_lab/)
 
 ---
+
+## ✨ Características
+
+- **Girador áureo 3D** en el hero: escultura dorada con esfera de Fibonacci de
+  partículas y espiral logarítmica (fallback 2D sin WebGL).
+- **Filotaxis WebGL** del girasol con el ángulo áureo exacto **137.508°**, zoom
+  y 4 paletas cálidas (Ámbar / Rojo φ / Fuego / Áureo).
+- **Sucesión F(n) en escala log**: una línea recta de pendiente `ln φ`.
+- **Inspector Áureo**: F(n), Binet, error de convergencia, fracción continua
+  [1;1,1,…], números de Lucas, ángulo áureo y Zeckendorf.
+- **Convergencia de la razón** F(n)/F(n−1) → φ, con asíntota y banda de φ.
+- **Pentágono & pentagrama** y **rectángulo áureo 1:φ** (teselación + espiral).
+- **Sonificación φ**: los ratios se estabilizan en un tono único (el "sonido").
+- **Aplicaciones reales**: Partenón, girasol, nautilus, mercados, música y
+  telecomunicaciones.
+- Bilingüe, responsive y compatible con táctil.
+
+## 🧮 La matemática
+
+| Concepto | Fórmula |
+|---|---|
+| Recurrencia | `F(n) = F(n−1) + F(n−2)` |
+| Número áureo | `φ = (1+√5)/2 ≈ 1.6180339887`, `φ² = φ + 1` |
+| Fórmula de Binet | `F(n) = (φⁿ − ψⁿ)/√5`, `ψ = (1−√5)/2` |
+| Ángulo áureo | `360°/φ² ≈ 137.508°` |
+| Convergencia | `F(n+1)/F(n) → φ` (error `O(φ⁻²ⁿ)`) |
+| Fracción continua | `φ = [1; 1, 1, 1, …]` |
+| Zeckendorf | todo entero = suma única de Fibonacci no consecutivos |
 
 ## 🗂️ Estructura de la aplicación (multi-pestaña)
 
 | Pestaña | Descripción |
 |---|---|
-| **🧪 Laboratorio** | Dashboard interactivo: bifurcación, Espiral Áurea, espacio de fases 3D, telaraña, serie temporal, histograma e inspector |
-| **📚 Aprende** | 6 módulos curriculares con 19 lecciones bilingües (LaTeX, demos y autoevaluación) + glosario |
-| **🖼️ Ejemplos** | Galería de 15 casos curados que abren el laboratorio con parámetros precargados |
-| **🎬 Videos** | Reproductor y playlist para videolecciones (embeds YouTube + schema VideoObject) |
-| **📖 Recursos** | Bibliografía académica del caos (May, Feigenbaum, Li–Yorke, Strogatz…) |
+| **🧪 Laboratorio** | 7 paneles: sucesión, filotaxis, esfera 3D, inspector, convergencia, pentagrama y rectángulo áureo |
+| **📚 Aprende** | 6 módulos curriculares bilingües (LaTeX, demos y autoevaluación) + glosario |
+| **❋ Ejemplos** | 15 casos curados que abren el laboratorio con parámetros precargados |
+| **🎬 Videos** | Playlist verificada sobre φ, filotaxis y Fibonacci (Numberphile, Nature by Numbers…) |
+| **📖 Recursos** | Bibliografía de φ (Livio, Dunlap, Binet, Vogel, Zeckendorf, OEIS…) |
 
-Cada pestaña es enlazable por hash (`#/lab`, `#/aprende`, …) y el estado del
-laboratorio se comparte y comparte por URL (`#/lab?model=sine&r=0.85`).
+Cada pestaña es enlazable por hash (`#/lab`, `#/aprende`, …) y el estado se
+comparte por URL (`#/lab?n=233&style=sunflower&palette=0`).
 
-## 🧮 Modelos Matemáticos (10)
+## 📂 Arquitectura
 
-- **Logístico** `r·x(1−x)` · **Cuadrático** `r−x²` — isomorfismo **exacto** con el eje real de Espiral Áurea.
-- **Seno** `r·sin(πx)` · **Exponencial** `r·e⁻ˣ` · **Polinómico** `r·x(1−xᵏ)` — secciones paramétricas.
-- **Tienda (Tent)** · **Bernoulli** · **Ricker** · **Cúbico** · **Gauss**.
-
-El Inspector distingue honestamente entre isomorfismos exactos (conjugaciones
-reales) y secciones paramétricas del eje real.
-
-## ✨ Características
-
-- Diagrama de bifurcación con curva de **Lyapunov** y zoom autosimilar.
-- Conjunto de **Espiral Áurea** en WebGL con zoom infinito y 4 paletas.
-- **Espacio de fases 3D**, **telaraña** con x₀ arrastrable, **serie temporal** e **histograma**.
-- **Detección de periodo** en tiempo real y hitos de Feigenbaum.
-- **Sonificación** de órbitas (Web Audio API).
-- **Exportación PNG** de cualquier panel.
-- Bilingüe **ES/EN** con selector de idioma.
-- Diseño responsive y compatible con táctil.
-
-## ⚡ Rendimiento
-
-El diagrama de bifurcación se computa en un **Web Worker** y se cachea (mover
-el cursor r solo redibuja el overlay); el fallback CPU de Espiral Áurea también
-corre en un worker con resolución progresiva.
+```text
+src/
+├── core/            # AppState (n·estilo), i18n ES/EN, router, theme, orrery φ
+├── math/
+│   ├── fibonacci.ts          # Secuencia, Binet, Zeckendorf, phyllotaxis, esfera
+│   ├── phyllotaxisCompute.ts # Cómputo CPU espejo del shader (fallback)
+│   ├── engineeringCases.ts   # Aplicaciones reales de φ
+│   ├── guidedExercises.ts    # Retos de laboratorio
+│   └── fibonacci.test.ts     # 15 tests del núcleo matemático
+├── workers/
+│   └── phyllotaxis.worker.ts # Filotaxis fuera del hilo principal
+├── components/
+│   ├── HeroPhi3D.ts          # Girador áureo 3D (Three.js)
+│   ├── PhyllotaxisShader.ts  # Filotaxis WebGL + fallback worker
+│   ├── SequenceCanvas.ts     # Sucesión F(n) en escala log
+│   ├── FibonacciSphere.ts    # Esfera de Fibonacci 3D
+│   ├── RatioConvergenceCanvas.ts
+│   ├── PentagramCanvas.ts
+│   ├── GoldenRectCanvas.ts
+│   ├── GoldenInspector.ts
+│   ├── Sonifier.ts           # Sonificación de ratios → φ
+│   └── LearnView/ExamplesView/VideosView/ResourcesView…
+├── content/          # curriculum, examples, videos, resources (bilingüe)
+├── styles/           # tokens oro/rojo + 6 módulos (core/nav/surfaces/views/motion)
+├── types/global.d.ts # Tipos globales (KaTeX, etc.)
+└── main.ts           # Orquestador con coalescing de render
+```
 
 ## 🚀 Instalación y ejecución
 
@@ -75,6 +108,12 @@ npm run test        # Vitest (núcleo matemático)
 
 CI ejecuta las 5 verificaciones en cada PR y despliega automáticamente a
 GitHub Pages desde `main`.
+
+## 🛠️ Tecnologías
+
+- **Vite 8 + TypeScript 6** (estro) · **Three.js r185** (WebGL/3D) · **KaTeX**
+- **Web Workers** (filotaxis fuera del hilo principal) · **Vitest**
+- Paleta oro `#FACC15` + rojo `#EF4444` sobre `#0F0A08` (razón áurea)
 
 ## 📄 Licencia
 

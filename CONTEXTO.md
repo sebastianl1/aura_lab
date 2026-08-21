@@ -1,33 +1,31 @@
-# 🧠 Documento de Contexto y Arquitectura Técnica: ChaosLab STEM Suite
+# 🧠 Documento de Contexto y Arquitectura Técnica: Aura Lab
 
-Este documento describe la arquitectura técnica del proyecto
-**ChaosLab STEM: Bifurcación ↔ Espiral Áurea Explorer** (Aura Lab Sl).
+Este documento describe la arquitectura técnica del proyecto **Aura Lab: la
+Sucesión de Fibonacci y el Número Áureo φ** (Aura Lab Sl).
 
 > El stack es **Vite 8 + TypeScript estricto + Three.js + Vitest**. El build de
 > producción se genera en `docs/` desde CI y se publica a GitHub Pages.
 
 ---
 
-## 🧮 Modelos Matemáticos (`src/math/models/`)
+## 🧮 Núcleo Matemático (`src/math/fibonacci.ts`)
 
-Todos heredan de `FibonacciModel` (`BaseModel.ts`), que define:
-`next(x, r)`, `derivative(x, r)`, `getOrbit`, `computeLyapunov`,
-`detectPeriod`, `rToC/cToR`, rangos, LaTeX, metadatos pedagógicos e
-`isomorphismKind: 'exact' | 'parametric'`.
+Módulo puro y testeable:
 
-1. **LogisticModel** — `x_{n+1} = r·x·(1−x)` — isomorfismo **exacto** con el eje real de Espiral Áurea.
-2. **QuadraticModel** — `x_{n+1} = r − x²` — **exacto** vía `y=−x`, `c = −r`.
-3. **SineModel** — `x_{n+1} = r·sin(πx)` — mapeo paramétrico.
-4. **ExponentialModel** — `x_{n+1} = r·e^{−x}` — mapeo paramétrico.
-5. **PolynomialModel** — `x_{n+1} = r·x·(1−x^k)`, con grado k seleccionable.
-6. **TentModel** — `r·min(x, 1−x)` — lineal por tramos, caótico en r=2.
-7. **BernoulliModel** — `(r·x) mod 1` — mapa de desplazamiento.
-8. **RickerModel** — `r·x·e^{−x}` — modelo poblacional unimodal.
-9. **CubicModel** — `r·x·(1−x²)` — pitchfork + duplicación de periodo.
-10. **GaussModel** — `e^{−r·x²}` — bifurcaciones de volteo (flip).
+1. **Sucesión de Fibonacci** — `F(n) = F(n−1)+F(n−2)`, `fib`, `fibSafe`, `fibonacciSeq`.
+2. **Razón áurea** — `φ = (1+√5)/2`, `φ² = φ+1`, `1/φ = φ−1`.
+3. **Fórmula de Binet** — `F(n) = (φⁿ−ψⁿ)/√5`.
+4. **Convergencia** — `ratio(n) = F(n)/F(n−1) → φ`, `ratioError`.
+5. **Ángulo áureo** — `360°/φ² ≈ 137.50776°`.
+6. **Números de Lucas** — `L(n) = φⁿ+ψⁿ`.
+7. **Zeckendorf** — descomposición única en Fibonacci no consecutivos.
+8. **Filotaxis** — primordios con el ángulo áureo y estilos botánicos.
+9. **Esfera de Fibonacci** — distribución en espiral dorada sobre la esfera.
+10. **Fracción continua** — `φ = [1; 1, 1, …]` con convergentes.
 
-`ModelRegistry` registra todos los modelos y `globalModelRegistry` es la
-instancia compartida. El selector de modelos de la UI se puebla dinámicamente.
+`SPIRAL_STYLES` registra 5 variantes botánicas reales (Girasol 137.5°, Hojas
+222.5°, Palo verde 135.9°, Retrocruzada 90°, Concha Nautilus) y alimenta el
+selector de la UI.
 
 ---
 
@@ -36,58 +34,60 @@ instancia compartida. El selector de modelos de la UI se puebla dinámicamente.
 ```text
 src/
 ├── core/
-│   ├── AppState.ts          # Estado global tipado + EventEmitter
-│   └── EventEmitter.ts      # Emisor de eventos genérico tipado
+│   ├── AppState.ts          # Estado global tipado: n, estilo, paleta, showPhi
+│   ├── EventEmitter.ts      # Emisor de eventos genérico tipado
+│   ├── i18n.ts              # ES/EN bilingüe
+│   ├── router.ts / urlState.ts  # Hash + params (?n=&style=&palette=)
+│   ├── theme.ts             # Viz palette desde CSS vars
+│   └── orrery.ts            # Fondo ambiental con glifos φ
 ├── math/
-│   ├── models/              # BaseModel + 10 modelos + ModelRegistry
-│   ├── bifurcationCompute.ts# Cómputo puro del diagrama (testeable)
-│   ├── mandelbrotCompute.ts # Cómputo CPU puro de Espiral Áurea (fallback)
-│   ├── lyapunovConfig.ts    # Parámetros compartidos de Lyapunov
-│   ├── feigenbaum.ts        # Hitos y constantes universales
-│   ├── engineeringCases.ts  # Datos de aplicaciones de ingeniería
-│   ├── guidedExercises.ts   # Retos de laboratorio para estudiantes
-│   └── latexHelper.ts       # Render LaTeX (KaTeX + fallback)
+│   ├── fibonacci.ts         # Núcleo puro (ver arriba)
+│   ├── phyllotaxisCompute.ts# Cómputo CPU espejo del shader
+│   ├── fibonacci.test.ts    # 15 tests vitest
+│   ├── engineeringCases.ts  # Aplicaciones reales de φ
+│   └── guidedExercises.ts   # Retos de laboratorio
 ├── workers/
-│   ├── bifurcation.worker.ts# Densidad + Lyapunov fuera del hilo principal
-│   └── mandelbrot.worker.ts # Fallback CPU de Espiral Áurea en worker
+│   └── phyllotaxis.worker.ts# Filotaxis fuera del hilo principal
 ├── components/
-│   ├── FibonacciCanvas.ts # Diagrama cacheado + Lyapunov (worker)
-│   ├── Espiral ÁureaShader.ts  # WebGL (Three.js) + fallback worker
-│   ├── CobwebCanvas.ts      # Telaraña con x₀ arrastrable
-│   ├── ThreePhaseScene.ts   # Espacio de fases 3D
-│   ├── Sonifier.ts          # Audio Web API
-│   ├── InspectorPanel.ts    # Métricas + periodo + hitos
-│   ├── EngineeringCasePanel.ts
-│   ├── GuidedExercisesPanel.ts
+│   ├── HeroPhi3D.ts         # Girador áureo 3D (Three.js)
+│   ├── PhyllotaxisShader.ts # Filotaxis WebGL + fallback worker
+│   ├── SequenceCanvas.ts    # Sucesión F(n) en escala log
+│   ├── FibonacciSphere.ts   # Esfera de Fibonacci 3D
+│   ├── RatioConvergenceCanvas.ts # F(n)/F(n−1) → φ
+│   ├── PentagramCanvas.ts   # Pentágono & pentagrama
+│   ├── GoldenRectCanvas.ts  # Rectángulo áureo & teselación
+│   ├── GoldenInspector.ts   # Métricas y teoremas φ
+│   ├── Sonifier.ts          # Ratios → notas (converge a un tono)
+│   ├── EngineeringCasePanel.ts / GuidedExercisesPanel.ts
+│   ├── LearnView / ExamplesView / VideosView / ResourcesView
 │   └── TheoryModal.ts
-├── styles/                  # base / layout / components
+├── content/                 # curriculum, examples, videos, resources (bilingüe)
+├── styles/                  # tokens oro/rojo + módulos (core/nav/surfaces/views/motion)
 ├── types/global.d.ts        # Tipos globales (KaTeX, etc.)
 └── main.ts                  # Orquestador con coalescing de render
 ```
 
 ---
 
-## ⚡ Rendimiento (Fase 2)
+## ⚡ Rendimiento
 
-- El diagrama de bifurcación **depende solo del modelo y del zoom**; se
-  computa una vez por clave en un **Web Worker** y se cachea en un
-  `OffscreenCanvas`. Mover el cursor r solo redibuja el overlay.
-- La curva de **Lyapunov** se precomputa por columna y se dibuja desde caché.
-- El fallback CPU de Espiral Áurea corre en un **Web Worker** (resolución
-  progresiva; half-res durante el drag).
-- Los buffers (`ImageData`, densidad, geometrías 3D) se reutilizan;
-  `ThreePhaseScene.dispose()` libera recursos.
+- La **filotaxis** se renderiza con un shader WebGL (Three.js) y tiene un
+  fallback CPU en un **Web Worker** (resolución progresiva, `ImageData`).
+- La **esfera de Fibonacci** y el **girador del hero** usan Three.js con DPR
+  cap (≤ 2) y `prefers-reduced-motion`.
+- La convergencia y los paneles 2D redibujan desde datos precomputados en el
+  hilo principal (render coalescido vía `requestAnimationFrame`).
 
 ---
 
 ## 💡 Principios Pedagógicos Integrados
 
-1. **Universalidad del Caos**: la duplicación de periodo sigue la constante de
-   Feigenbaum δ ≈ 4.6692 en familias unimodales suaves (logístico, seno,
-   Ricker, cúbico), verificable en el laboratorio.
-2. **Espiral Áurea como Atlas**: el corte real `c ∈ [−2, 0.25]` cartografía las
-   bifurcaciones cuadráticas. El Inspector distingue isomorfismos **exactos**
-   (logístico, cuadrático) de **secciones paramétricas** (resto).
+1. **La razón áurea es universal**: la convergencia `F(n+1)/F(n) → φ` es
+   geométrica (error `O(φ⁻²ⁿ)`), verificable en el panel de convergencia.
+2. **El ángulo áureo empaqueta**: la filotaxis del girasol usa 137.508° y
+   produce espirales cuyos conteos son pares de Fibonacci consecutivos.
+3. **Binet y Zeckendorf** conectan la sucesión con el álgebra y la teoría de
+   números en el Inspector Áureo.
 
 ---
 
@@ -95,7 +95,8 @@ src/
 
 Consultar `adr/`:
 - `ADR-0001-architecture.md` — arquitectura modular y estado tipado.
-- `ADR-0003-isomorphism.md` — isomorfismo r↔c honesto.
+- `ADR-0003-isomorphism.md` — isomorfismo entre representaciones del número
+  áureo (recurrencia ↔ fórmula cerrada ↔ fracción continua).
 
 ---
 

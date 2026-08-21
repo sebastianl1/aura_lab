@@ -813,8 +813,8 @@ input[type='range']::-moz-range-thumb {
 
 @media (min-width: 769px) {
   .lab-hero {
-    grid-template-columns: 1.3fr 1fr;
-    padding: 2rem 2.2rem;
+    grid-template-columns: 1fr 1.5fr;
+    padding: 2rem 1rem 2rem 2.2rem;
     margin: 0.7rem 1rem 0.5rem;
   }
 }
@@ -907,11 +907,11 @@ input[type='range']::-moz-range-thumb {
   }
 }
 
-/* Golden girador (φ) hero — wide and pushed to the right edge */
+/* Golden girador (φ) hero — fills the wide right column */
 #hero-phi3d {
-  width: 560px;
-  height: 520px;
-  max-width: 96%;
+  width: 100%;
+  max-width: 760px;
+  height: 540px;
   margin-left: auto;
   position: relative;
 }
@@ -919,9 +919,9 @@ input[type='range']::-moz-range-thumb {
   display: block;
 }
 #hero-spiral {
-  width: 560px;
-  height: 520px;
-  max-width: 96%;
+  width: 100%;
+  max-width: 760px;
+  height: 540px;
   margin-left: auto;
   position: relative;
   opacity: 0.75;

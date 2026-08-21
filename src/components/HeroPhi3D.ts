@@ -32,7 +32,7 @@ export class HeroPhi3D {
       return;
     }
     this.renderer.setClearColor(0x000000, 0);
-    this.camera.position.z = 3.2;
+    this.camera.position.z = 4.0;
     this.build();
     container.appendChild(this.renderer.domElement);
     this.resize();
@@ -52,12 +52,12 @@ export class HeroPhi3D {
       emissive: new THREE.Color(0xb45309),
       emissiveIntensity: 0.25,
     });
-    const icosa = new THREE.Mesh(new THREE.IcosahedronGeometry(0.78, 0), mat);
+    const icosa = new THREE.Mesh(new THREE.IcosahedronGeometry(1.1, 0), mat);
     this.group.add(icosa);
 
     // Wireframe ring with golden-ratio proportion.
     const wire = new THREE.LineSegments(
-      new THREE.WireframeGeometry(new THREE.IcosahedronGeometry(0.95, 1)),
+      new THREE.WireframeGeometry(new THREE.IcosahedronGeometry(1.35, 1)),
       new THREE.LineBasicMaterial({ color: 0xfde68a, transparent: true, opacity: 0.28 }),
     );
     this.group.add(wire);
@@ -68,9 +68,9 @@ export class HeroPhi3D {
     const positions = new Float32Array(count * 3);
     const colors = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
-      positions[i * 3] = pts[i * 3]! * 1.55;
-      positions[i * 3 + 1] = pts[i * 3 + 1]! * 1.55;
-      positions[i * 3 + 2] = pts[i * 3 + 2]! * 1.55;
+      positions[i * 3] = pts[i * 3]! * 2.0;
+      positions[i * 3 + 1] = pts[i * 3 + 1]! * 2.0;
+      positions[i * 3 + 2] = pts[i * 3 + 2]! * 2.0;
       const [r, g, b] = warmColor(0, i / Math.max(1, count - 1));
       colors[i * 3] = r / 255;
       colors[i * 3 + 1] = g / 255;
@@ -96,7 +96,7 @@ export class HeroPhi3D {
     for (let i = 0; i <= 240; i++) {
       const t = i / 240;
       const a = t * 6 * Math.PI;
-      const r = 0.3 * Math.pow(PHI, t * 2.5);
+      const r = 0.42 * Math.pow(PHI, t * 2.5);
       spiralPts.push(Math.cos(a) * r, Math.sin(a) * r * 0.55, t * 0.9 - 0.45);
     }
     const spiralGeom = new THREE.BufferGeometry();

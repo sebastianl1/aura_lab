@@ -895,32 +895,25 @@ input[type='range']::-moz-range-thumb {
 /* Bohr atom — animated quantum hero */
 .lab-hero-visual {
   position: relative;
-  min-height: 200px;
-  display: none;
-}
-
-@media (min-width: 769px) {
-  .lab-hero-visual {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
 }
 
 /* Golden girador (φ) hero */
 #hero-phi3d {
-  width: 340px;
-  height: 340px;
-  max-width: 80%;
   position: relative;
+  width: min(340px, 100%);
+  aspect-ratio: 1 / 1;
+  margin-inline: auto;
 }
 #hero-phi3d canvas {
   display: block;
 }
 #hero-spiral {
-  width: 340px;
-  height: 340px;
-  max-width: 80%;
+  width: min(340px, 100%);
+  aspect-ratio: 1 / 1;
   position: relative;
   opacity: 0.75;
   filter: drop-shadow(0 0 22px rgba(250, 204, 21, 0.18));

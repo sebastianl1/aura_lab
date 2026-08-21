@@ -8,6 +8,11 @@ import { warmColor } from './canvasHelpers.js';
  * and a logarithmic golden spiral. Falls back to the 2D spiral canvas when
  * WebGL is unavailable. Honors prefers-reduced-motion.
  */
+// Outer extent of the golden composition (particle halo r=1.55 + margin).
+const CONTENT_RADIUS = 1.68;
+// Padding factor so the sculpture never kisses the edges.
+const FIT_MARGIN = 1.1;
+
 export class HeroPhi3D {
   private container: HTMLElement;
   private fallbackCanvas: HTMLCanvasElement;
@@ -32,7 +37,6 @@ export class HeroPhi3D {
       return;
     }
     this.renderer.setClearColor(0x000000, 0);
-    this.camera.position.z = 3.2;
     this.build();
     container.appendChild(this.renderer.domElement);
     this.resize();
@@ -139,6 +143,13 @@ export class HeroPhi3D {
     this.renderer.domElement.style.height = `${h}px`;
     this.renderer.setPixelRatio(dpr);
     this.camera.aspect = w / h;
+
+    // Frame the whole φ composition: keep it fully visible and centered
+    // regardless of container size, DPR or aspect ratio.
+    const fovRad = (this.camera.fov * Math.PI) / 180;
+    const halfH = CONTENT_RADIUS * FIT_MARGIN * Math.max(1, 1 / this.camera.aspect);
+    this.camera.position.z = halfH / Math.tan(fovRad / 2);
+
     this.camera.updateProjectionMatrix();
   }
 

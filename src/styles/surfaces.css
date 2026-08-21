@@ -905,28 +905,26 @@ input[type='range']::-moz-range-thumb {
   .lab-hero-visual {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: center;
   }
 }
 
-/* Golden girador (φ) hero — fills its half of the hero, right side */
+/* Golden girador (φ) hero — centered in its half, air on both sides */
 #hero-phi3d {
-  flex: 0 1 auto;
-  width: 100%;
+  flex: 0 0 auto;
+  width: 92%;
   max-width: 800px;
-  height: 540px;
-  min-width: 0;
+  height: 580px;
   position: relative;
 }
 #hero-phi3d canvas {
   display: block;
 }
 #hero-spiral {
-  flex: 0 1 auto;
-  width: 100%;
+  flex: 0 0 auto;
+  width: 92%;
   max-width: 800px;
-  height: 540px;
-  min-width: 0;
+  height: 580px;
   position: relative;
   opacity: 0.75;
   filter: drop-shadow(0 0 22px rgba(250, 204, 21, 0.18));

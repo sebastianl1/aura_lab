@@ -1,0 +1,36 @@
+{
+  "name": "aura-lab",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "node ./node_modules/vite/bin/vite.js --host 0.0.0.0 --port 3000",
+    "dev": "node ./node_modules/vite/bin/vite.js",
+    "build": "node ./node_modules/vite/bin/vite.js build",
+    "preview": "node ./node_modules/vite/bin/vite.js preview",
+    "deploy": "npm run build && node ./node_modules/gh-pages/bin/gh-pages.js -d docs",
+    "typecheck": "node ./node_modules/typescript/bin/tsc --noEmit",
+    "lint": "node ./node_modules/eslint/bin/eslint.js src",
+    "lint:fix": "node ./node_modules/eslint/bin/eslint.js src --fix",
+    "format": "node ./node_modules/prettier/bin/prettier.cjs --write \"src/**/*.{ts,css,html}\" \"index.html\"",
+    "format:check": "node ./node_modules/prettier/bin/prettier.cjs --check \"src/**/*.{ts,css,html}\" \"index.html\"",
+    "test": "node ./node_modules/vitest/vitest.mjs run",
+    "test:watch": "node ./node_modules/vitest/vitest.mjs"
+  },
+  "dependencies": {
+    "three": "^0.185.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^26.2.0",
+    "@types/three": "^0.185.4",
+    "eslint": "^10.8.1",
+    "eslint-config-prettier": "^10.1.8",
+    "gh-pages": "^6.3.0",
+    "prettier": "^3.9.6",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.67.0",
+    "vite": "^8.2.1",
+    "vitest": "^4.1.10"
+  }
+}

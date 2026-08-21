@@ -1,0 +1,192 @@
+/* ============================================================
+   AETHERION · motion & cosmic background
+   ============================================================ */
+
+/* ---------- Ambient background (fixed, multi-layer) ---------- */
+.ambient-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background:
+    radial-gradient(1200px 800px at 12% -10%, rgba(155, 107, 255, 0.16), transparent 60%),
+    radial-gradient(1000px 700px at 88% 8%, rgba(77, 216, 255, 0.1), transparent 55%),
+    radial-gradient(1100px 900px at 50% 115%, rgba(246, 196, 69, 0.07), transparent 60%), var(--bg);
+}
+
+/* Nebula halos (screen blend) */
+.nebula {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  mix-blend-mode: screen;
+  will-change: transform;
+  animation: nebula-drift 32s ease-in-out infinite alternate;
+}
+
+.nebula-a {
+  width: 46vw;
+  height: 46vw;
+  left: -12vw;
+  top: -12vw;
+  background: radial-gradient(circle, rgba(142, 124, 195, 0.3), transparent 70%);
+}
+
+.nebula-b {
+  width: 40vw;
+  height: 40vw;
+  right: -10vw;
+  top: 24vh;
+  background: radial-gradient(circle, rgba(127, 216, 240, 0.24), transparent 70%);
+  animation-delay: -11s;
+}
+
+.nebula-c {
+  width: 34vw;
+  height: 34vw;
+  left: 30vw;
+  bottom: -14vw;
+  background: radial-gradient(circle, rgba(232, 184, 75, 0.18), transparent 70%);
+  animation-delay: -20s;
+}
+
+@keyframes nebula-drift {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(4vw, -3vh, 0) scale(1.14);
+  }
+}
+
+/* Celestial coordinate grid (arcs) */
+.ret-grid {
+  position: absolute;
+  inset: -20%;
+  background:
+    radial-gradient(
+      ellipse 40% 32% at 50% 18%,
+      transparent 60%,
+      rgba(180, 200, 255, 0.03) 61%,
+      transparent 62%
+    ),
+    radial-gradient(
+      ellipse 62% 48% at 50% 22%,
+      transparent 60%,
+      rgba(180, 200, 255, 0.027) 61%,
+      transparent 62%
+    ),
+    radial-gradient(
+      ellipse 90% 70% at 50% 28%,
+      transparent 60%,
+      rgba(180, 200, 255, 0.024) 61%,
+      transparent 62%
+    ),
+    linear-gradient(rgba(180, 200, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(180, 200, 255, 0.02) 1px, transparent 1px);
+  background-size:
+    auto,
+    auto,
+    auto,
+    64px 64px,
+    64px 64px;
+}
+
+/* Starfield + constellation layer (populated by orrery.ts) */
+.starfield {
+  position: absolute;
+  inset: 0;
+}
+
+.star {
+  position: absolute;
+  border-radius: 50%;
+  background: #eaf2ff;
+  animation: twinkle var(--tw-dur, 4s) ease-in-out infinite alternate;
+  animation-delay: var(--tw-delay, 0s);
+}
+
+.star.size-1 {
+  width: 1px;
+  height: 1px;
+}
+
+.star.size-2 {
+  width: 2px;
+  height: 2px;
+}
+
+.star.size-3 {
+  width: 3px;
+  height: 3px;
+  box-shadow: 0 0 6px rgba(234, 242, 255, 0.8);
+}
+
+@keyframes twinkle {
+  from {
+    opacity: 0.25;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Constellation connectors (SVG) */
+.constellations {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.constellations line {
+  stroke: rgba(180, 200, 255, 0.08);
+  stroke-width: 1;
+  stroke-dasharray: 3 5;
+}
+
+/* Floating mathematical glyphs */
+.glyph-field {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.glyph {
+  position: absolute;
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: rgba(180, 200, 255, 0.045);
+  user-select: none;
+  animation: glyph-float 18s ease-in-out infinite;
+}
+
+@keyframes glyph-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-2deg);
+  }
+  50% {
+    transform: translateY(-18px) rotate(2deg);
+  }
+}
+
+/* ---------- Parallax depth ---------- */
+.parallax {
+  will-change: transform;
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .parallax {
+    transform: none !important;
+  }
+}

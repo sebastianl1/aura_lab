@@ -6,10 +6,10 @@
 [![Vitest](https://img.shields.io/badge/Vitest-4-green?style=for-the-badge&logo=vitest&logoColor=white)](https://vitest.dev/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
-**Aura Lab Sl** es un **Laboratorio Virtual Interactivo** de dinámica no
-lineal, teoría del caos e isomorfismo con el Conjunto de Espiral Áurea, diseñado
-para educación superior e ingeniería. Bilingüe (ES/EN) y desplegable como PWA
-ligera en GitHub Pages.
+**Aura Lab Sl** es un **Laboratorio Virtual Interactivo** de la proporción
+áurea, la sucesión de Fibonacci y la Espiral Áurea como atlas de las órbitas
+cuadráticas, diseñado para educación superior e ingeniería. Bilingüe (ES/EN) y
+desplegable como PWA ligera en GitHub Pages.
 
 > Hecho por **Sebastián Laguna**
 
@@ -57,8 +57,8 @@ corre en un worker con resolución progresiva.
 ## 🚀 Instalación y ejecución
 
 ```bash
-git clone https://github.com/sebastianl1/Fractalab.git
-cd Fractalab
+git clone https://github.com/sebastianl1/aura_lab.git
+cd aura_lab
 npm install
 npm run dev        # servidor de desarrollo
 npm run build      # build de producción a docs/

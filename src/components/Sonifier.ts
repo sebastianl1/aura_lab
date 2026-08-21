@@ -28,7 +28,7 @@ interface HarmonicSpec {
 }
 
 const HARMONICS: HarmonicSpec[] = [
-  { mult: 1, gain: 1.0, decay: 2.0, detuneCents: 2 },   // fundamental (+2 cents inharmonicity)
+  { mult: 1, gain: 1.0, decay: 2.0, detuneCents: 2 }, // fundamental (+2 cents inharmonicity)
   { mult: 2, gain: 0.5, decay: 1.2, detuneCents: 0 },
   { mult: 3, gain: 0.2, decay: 0.8, detuneCents: 0 },
   { mult: 4, gain: 0.1, decay: 0.5, detuneCents: 0 },
@@ -51,9 +51,33 @@ export interface StylePreset {
 }
 
 const PRESETS: StylePreset[] = [
-  { id: 'melancholic', name: 'Melancólica (Einaudi)', scale: 'naturalMinor', tempoMs: 140, dynamics: true, subGain: 0.025, warmth: 0.6 },
-  { id: 'classic', name: 'Clásica (Beethoven)', scale: 'naturalMinor', tempoMs: 100, dynamics: true, subGain: 0.015, warmth: 0.8 },
-  { id: 'serenade', name: 'Serenata (Debussy)', scale: 'lydian', tempoMs: 200, dynamics: true, subGain: 0.01, warmth: 0.4 },
+  {
+    id: 'melancholic',
+    name: 'Melancólica (Einaudi)',
+    scale: 'naturalMinor',
+    tempoMs: 140,
+    dynamics: true,
+    subGain: 0.025,
+    warmth: 0.6,
+  },
+  {
+    id: 'classic',
+    name: 'Clásica (Beethoven)',
+    scale: 'naturalMinor',
+    tempoMs: 100,
+    dynamics: true,
+    subGain: 0.015,
+    warmth: 0.8,
+  },
+  {
+    id: 'serenade',
+    name: 'Serenata (Debussy)',
+    scale: 'lydian',
+    tempoMs: 200,
+    dynamics: true,
+    subGain: 0.01,
+    warmth: 0.4,
+  },
 ];
 
 // ─── Dynamics by Lyapunov ────────────────────────────────────────────
@@ -62,7 +86,7 @@ function dynamicsFromLyapunov(lambda: number): number {
   if (lambda < -0.5) return 0.03;
   if (lambda < 0) return 0.05;
   if (lambda < 0.05) return 0.07;
-  return 0.10;
+  return 0.1;
 }
 
 function dynamicsLabel(lambda: number): string {
@@ -111,17 +135,29 @@ export class Sonifier {
 
   // ── Getters/Setters ──────────────────────────────────────────────
 
-  get musicalMode(): MusicalMode { return this._musicalMode; }
-  set musicalMode(mode: MusicalMode) { this._musicalMode = mode; this.buildScaleCache(); }
+  get musicalMode(): MusicalMode {
+    return this._musicalMode;
+  }
+  set musicalMode(mode: MusicalMode) {
+    this._musicalMode = mode;
+    this.buildScaleCache();
+  }
 
-  get dynamicsEnabled(): boolean { return this._dynamicsOn; }
-  set dynamicsEnabled(v: boolean) { this._dynamicsOn = v; }
+  get dynamicsEnabled(): boolean {
+    return this._dynamicsOn;
+  }
+  set dynamicsEnabled(v: boolean) {
+    this._dynamicsOn = v;
+  }
 
   // ── Scale builder ────────────────────────────────────────────────
 
   private buildScaleCache(): void {
     const semitones = SCALE_MAP[this._musicalMode];
-    if (!semitones || semitones.length === 0) { this.builtScale = []; return; }
+    if (!semitones || semitones.length === 0) {
+      this.builtScale = [];
+      return;
+    }
     const notes: number[] = [];
     for (let oct = 3; oct <= 5; oct++) {
       for (const s of semitones) {
@@ -167,7 +203,11 @@ export class Sonifier {
   }
 
   togglePlay(): boolean {
-    if (this.isPlaying) { this.stop(); } else { this.start(); }
+    if (this.isPlaying) {
+      this.stop();
+    } else {
+      this.start();
+    }
     return this.isPlaying;
   }
 
@@ -186,7 +226,10 @@ export class Sonifier {
 
   stop(): void {
     this.isPlaying = false;
-    if (this.timerId !== null) { window.clearInterval(this.timerId); this.timerId = null; }
+    if (this.timerId !== null) {
+      window.clearInterval(this.timerId);
+      this.timerId = null;
+    }
     if (this.masterGain && this.audioCtx) {
       this.masterGain.gain.setTargetAtTime(0.0, this.audioCtx.currentTime, 0.05);
     }
@@ -195,8 +238,13 @@ export class Sonifier {
   // ── Audio initialization (multi-harmonic piano) ──────────────────
 
   private initAudio(): void {
-    if (this.audioCtx) { if (this.audioCtx.state === 'suspended') void this.audioCtx.resume(); return; }
-    const Ctx = window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+    if (this.audioCtx) {
+      if (this.audioCtx.state === 'suspended') void this.audioCtx.resume();
+      return;
+    }
+    const Ctx =
+      window.AudioContext ||
+      (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
     if (!Ctx) return;
     this.audioCtx = new Ctx();
 
@@ -273,7 +321,7 @@ export class Sonifier {
       harmonicGain.gain.linearRampToValueAtTime(activeGain * 1.2, now + attackTime);
       // Decay to sustain
       harmonicGain.gain.exponentialRampToValueAtTime(
-        Math.max(0.0001, activeGain * sustainLevel * (1 - (i * 0.18))),
+        Math.max(0.0001, activeGain * sustainLevel * (1 - i * 0.18)),
         now + decayTime,
       );
       // Release towards zero (exponential tail)
@@ -327,7 +375,10 @@ export class Sonifier {
     let noteName: string;
 
     if (this.builtScale.length > 0) {
-      const idx = Math.min(this.builtScale.length - 1, Math.round(norm * (this.builtScale.length - 1)));
+      const idx = Math.min(
+        this.builtScale.length - 1,
+        Math.round(norm * (this.builtScale.length - 1)),
+      );
       freq = this.builtScale[idx] ?? 220;
       const scale = SCALE_MAP[this._musicalMode]!;
       const octave = 3 + Math.floor(idx / scale.length);

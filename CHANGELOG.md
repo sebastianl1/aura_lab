@@ -6,6 +6,17 @@ y el proyecto usa [Conventional Commits](https://www.conventionalcommits.org/).
 
 ## [En desarrollo]
 
+### Restauración — App completa + tema Fibonacci
+- Se restaura la app completa (componentes, modelos, workers, contenido) con
+  estructura idéntica al proyecto de referencia.
+- Tema Aura Lab: paleta oro `#FACC15` + rojo `#EF4444` sobre `#0F0A08`
+  (raíz áurea); distintos acentos cálidos por zona.
+- Paletas del shader de la Espiral Áurea retematizadas: Ámbar, Rojo φ,
+  Fuego y Áureo.
+- Hero con espiral logarítmica φ animada (canvas, auto-dibujada).
+- Renombrado total al vocabulario Fibonacci/φ (bardas, paneles, i18n ES/EN,
+  ejercicios, curriculum, documentación).
+
 ### Correcciones — Funcionalidad del laboratorio
 - **Se elimina el reveal que ocultaba el dashboard**: los diagramas son
   siempre visibles e interactivos desde el primer render (antes quedaban

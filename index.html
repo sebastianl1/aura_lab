@@ -154,30 +154,22 @@
       <!-- Orrery hero -->
       <section class="lab-hero">
         <div class="lab-hero-copy">
-          <p class="lab-hero-eyebrow">⌬ Observatorio de dinámica no lineal</p>
-          <h1 class="lab-hero-title">
-            Galaxia del <span class="grad-text">caos determinista</span>
-          </h1>
-          <div class="lab-hero-coord font-mono">RA 03h 12m · DEC −22.4° · z = c + ε</div>
+          <p class="lab-hero-eyebrow">⌬ Observatorio del número áureo</p>
+          <h1 class="lab-hero-title">Espiral del <span class="grad-text">número áureo</span></h1>
+          <div class="lab-hero-coord font-mono">φ = (1+√5)/2 ≈ 1.6180339887 · 1/φ ≈ 0.6180339</div>
           <p class="lab-hero-sub">
-            Bifurcaciones, exponente de Lyapunov y el conjunto de Mandelbrot: un atlas celeste para
-            ver cómo el orden matemático se pliega en caos.
+            Fibonacci, la razón áurea y la espiral que crece en proporción perfecta: un atlas
+            celeste para ver cómo el orden matemático se pliega sobre sí mismo.
           </p>
           <div class="lab-hero-badges">
-            <span class="hero-badge">10 modelos</span>
-            <span class="hero-badge">Lyapunov en vivo</span>
-            <span class="hero-badge">Mandelbrot ↔ Bifurcación</span>
-            <span class="hero-badge">Sonificación</span>
+            <span class="hero-badge">10 modelos φ</span>
+            <span class="hero-badge">Espiral Áurea en vivo</span>
+            <span class="hero-badge">Espiral Áurea ↔ Órbita</span>
+            <span class="hero-badge">Sonificación φ</span>
           </div>
         </div>
         <div class="lab-hero-visual" aria-hidden="true">
-          <div class="atom-visual">
-            <div class="prob-cloud"></div>
-            <div class="nucleus">λ</div>
-            <div class="orbit orbit-1"><span class="electron e1"></span></div>
-            <div class="orbit orbit-2"><span class="electron e2"></span></div>
-            <div class="orbit orbit-3"><span class="electron e3"></span></div>
-          </div>
+          <canvas id="hero-spiral"></canvas>
         </div>
       </section>
 
@@ -212,13 +204,13 @@
 
         <div class="control-group">
           <label class="control-label" for="select-palette" data-i18n="ctrl.palette"
-            >Paleta Mandelbrot:</label
+            >Paleta de Color:</label
           >
           <select id="select-palette">
-            <option value="0">Solar</option>
-            <option value="1">Nebulosa</option>
-            <option value="2">Espectro</option>
-            <option value="3">Atlas</option>
+            <option value="0">Ámbar</option>
+            <option value="1">Rojo φ</option>
+            <option value="2">Fuego</option>
+            <option value="3">Áureo</option>
           </select>
         </div>
 
@@ -234,8 +226,12 @@
             >Sonido:</label
           >
           <select id="select-sound-mode">
-            <option value="pentatonicMinor" data-i18n="sound.mode.pentMinor">Pentatónica menor</option>
-            <option value="pentatonicMajor" data-i18n="sound.mode.pentMajor">Pentatónica mayor</option>
+            <option value="pentatonicMinor" data-i18n="sound.mode.pentMinor">
+              Pentatónica menor
+            </option>
+            <option value="pentatonicMajor" data-i18n="sound.mode.pentMajor">
+              Pentatónica mayor
+            </option>
             <option value="naturalMinor" data-i18n="sound.mode.minor">Menor natural</option>
             <option value="lydian" data-i18n="sound.mode.lydian">Lidio</option>
             <option value="dorian" data-i18n="sound.mode.dorian">Dórico</option>
@@ -244,12 +240,12 @@
             <option value="chords" data-i18n="sound.mode.chords">Acordes piano</option>
             <option value="glissando" data-i18n="sound.mode.glissando">Glissando continuo</option>
           </select>
-          <label class="control-label" for="select-preset" data-i18n="sound.preset"
-            >Estilo:</label
-          >
+          <label class="control-label" for="select-preset" data-i18n="sound.preset">Estilo:</label>
           <select id="select-preset">
             <option value="" data-i18n="sound.mode.custom">Personalizado</option>
-            <option value="melancholic" data-i18n="sound.preset.melancholic">Melancólica (Einaudi)</option>
+            <option value="melancholic" data-i18n="sound.preset.melancholic">
+              Melancólica (Einaudi)
+            </option>
             <option value="classic" data-i18n="sound.preset.classic">Clásica (Beethoven)</option>
             <option value="serenade" data-i18n="sound.preset.serenade">Serenata (Debussy)</option>
           </select>
@@ -272,8 +268,9 @@
           <span id="latex-derivative" class="latex-render"></span>
         </div>
         <div class="theory-banner-principle" data-i18n="banner.principles">
-          💡 <strong>Principios:</strong> 1. <em>Caos Universal en Múltiples Funciones.</em> | 2.
-          <em>Mandelbrot es un "Atlas" de bifurcaciones cuadráticas.</em>
+          💡 <strong>Principios:</strong> 1. <em>La proporción áurea emerge en toda órbita.</em> |
+          2.
+          <em>La Espiral Áurea es un "atlas" de órbitas cuadráticas.</em>
         </div>
       </section>
 
@@ -282,7 +279,7 @@
         <section class="canvas-panel" data-sys="SYS·01">
           <div class="panel-header">
             <span class="panel-title" data-i18n="panel.bifurcation"
-              ><span>📈</span> Diagrama de Bifurcación HD (r vs x)</span
+              ><span>📈</span> Árbol de Fibonacci HD (r vs x)</span
             >
             <span class="panel-sub" data-i18n="panel.bifurcation.sub"
               >Arrastra la línea vertical para explorar el parámetro r</span
@@ -306,7 +303,7 @@
         <section class="canvas-panel" data-sys="SYS·02">
           <div class="panel-header">
             <span class="panel-title" data-i18n="panel.mandelbrot"
-              ><span>🌀</span> Conjunto de Mandelbrot & Eje Real Isomórfico (c ∈ [-2.0, 0.25])</span
+              ><span>🌀</span> Espiral Áurea & Atlas φ (c ∈ [-2.0, 0.25])</span
             >
             <span class="panel-sub" data-i18n="panel.mandelbrot.sub"
               >Haz clic para seleccionar c o usa la rueda para Zoom</span
@@ -355,7 +352,7 @@
         <section class="canvas-panel" data-sys="SYS·04">
           <div class="panel-header">
             <span class="panel-title" data-i18n="panel.inspector"
-              ><span>📊</span> Inspector Matemático & Métricas de Caos</span
+              ><span>📊</span> Inspector Matemático & Convergencia de la Órbita</span
             >
           </div>
           <div id="inspector-container"></div>
@@ -511,15 +508,15 @@
     <div id="modal-exercises-backdrop" class="modal-backdrop"></div>
     <div id="modal-exercises" class="modal-window">
       <div class="modal-header">
-        <h2>🎯 Ejercicios Guiados para Estudiantes</h2>
+        <h2>🎯 Ejercicios Guiados de la Espiral Áurea</h2>
         <button id="modal-ex-close-btn" class="btn">✕</button>
       </div>
       <div class="modal-body">
         <div class="exercise-selector">
-          <button class="ex-nav-btn active" data-ex="ex1">Reto 1: 1ª Bifurcación</button>
-          <button class="ex-nav-btn" data-ex="ex2">Reto 2: Feigenbaum</button>
+          <button class="ex-nav-btn active" data-ex="ex1">Reto 1: φ y la 1ª bifurcación</button>
+          <button class="ex-nav-btn" data-ex="ex2">Reto 2: Feigenbaum ↔ φ</button>
           <button class="ex-nav-btn" data-ex="ex3">Reto 3: Periodo 3</button>
-          <button class="ex-nav-btn" data-ex="ex4">Reto 4: Caos Universal</button>
+          <button class="ex-nav-btn" data-ex="ex4">Reto 4: Órbita Universal</button>
           <button class="ex-nav-btn" data-ex="ex5">Reto 5: Ingeniería</button>
         </div>
 
@@ -552,21 +549,22 @@
     <div id="modal-backdrop" class="modal-backdrop"></div>
     <div id="modal-theory" class="modal-window">
       <div class="modal-header">
-        <h2>Isomorfismo: Bifurcaciones ↔ Conjunto de Mandelbrot</h2>
+        <h2>Isomorfismo: Órbitas ↔ Espiral Áurea</h2>
         <button id="modal-close-btn" class="btn">✕</button>
       </div>
       <div class="modal-body">
         <h3>1. Principios Pedagógicos Fundamentales</h3>
         <p>
-          <strong>1. El Caos es Universal:</strong> La transición hacia el caos no es una anomalía
-          de una función aislada. Ya sea el mapa logístico, el mapa seno o funciones exponenciales,
-          todos los mapas cuadráticos y unimodales siguen la misma ruta de duplicación de periodo
-          regida por la constante de Feigenbaum <code id="latex-feigenbaum-delta"></code>.
+          <strong>1. La razón áurea es universal:</strong> la duplicación de periodo no es una
+          anomalía de una función aislada. Desde el mapa logístico hasta el mapa seno, todas las
+          familias unimodales comparten la misma ruta hacia la complejidad, regida por la constante
+          de Feigenbaum <code id="latex-feigenbaum-delta"></code>, cuya razón se aproxima a la
+          sensibilidad de la espiral áurea <code>φ</code>.
         </p>
         <p>
-          <strong>2. Mandelbrot como Atlas:</strong> El Conjunto de Mandelbrot no es solo una figura
-          estética; es un <em>atlas completo</em> que cartografía todas las bifurcaciones y ciclos
-          límite cuadráticos sobre su eje real <code id="latex-mandelbrot-slice"></code>.
+          <strong>2. Espiral Áurea como Atlas:</strong> la Espiral Áurea no es solo una figura
+          estética; es un <em>atlas completo</em> que cartografía las órbitas y ciclos límite
+          cuadráticos sobre su eje real <code id="latex-mandelbrot-slice"></code>.
         </p>
 
         <h3>2. Transformación Lineal de Isomorfismo</h3>

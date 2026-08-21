@@ -140,6 +140,12 @@ export class HeroPhi3D {
     this.renderer.setPixelRatio(dpr);
     this.camera.aspect = w / h;
     this.camera.updateProjectionMatrix();
+    // Auto-fit: scale the sculpture so the golden halo/spiral always fits the
+    // visible field in BOTH axes, whatever the canvas aspect (no cut edges).
+    const halfH = Math.tan((this.camera.fov / 2) * (Math.PI / 180)) * this.camera.position.z;
+    const halfW = halfH * this.camera.aspect;
+    const fit = Math.min(halfW, halfH) / 2.1; // 2.1 ≈ max sculpture extent (halo 2.0)
+    this.group.scale.setScalar(Math.min(1, Math.max(0.5, fit)));
   }
 
   private loop(): void {

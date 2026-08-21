@@ -172,6 +172,23 @@
   }
 }
 
+/* Live metric chip floating over a panel */
+.panel-chip {
+  position: absolute;
+  bottom: 8px;
+  left: 10px;
+  z-index: 6;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--gold);
+  background: rgba(15, 10, 8, 0.72);
+  border: 1px solid var(--border-strong);
+  padding: 0.14rem 0.55rem;
+  border-radius: 20px;
+  pointer-events: none;
+  backdrop-filter: blur(4px);
+}
+
 canvas {
   position: absolute;
   top: 0;
@@ -796,8 +813,9 @@ input[type='range']::-moz-range-thumb {
 
 @media (min-width: 769px) {
   .lab-hero {
-    grid-template-columns: 1.3fr 1fr;
-    padding: 2rem 2.2rem;
+    grid-template-columns: 1fr 1.55fr;
+    gap: 1rem 1.5rem;
+    padding: 2rem 1.1rem 2rem 2.2rem;
     margin: 0.7rem 1rem 0.5rem;
   }
 }
@@ -886,24 +904,24 @@ input[type='range']::-moz-range-thumb {
   .lab-hero-visual {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
   }
 }
 
 /* Golden girador (φ) hero */
 #hero-phi3d {
-  width: 340px;
-  height: 340px;
-  max-width: 80%;
+  width: 100%;
+  max-width: none;
+  height: clamp(400px, 56vh, 600px);
   position: relative;
 }
 #hero-phi3d canvas {
   display: block;
 }
 #hero-spiral {
-  width: 340px;
-  height: 340px;
-  max-width: 80%;
+  width: 100%;
+  max-width: none;
+  height: clamp(400px, 56vh, 600px);
   position: relative;
   opacity: 0.75;
   filter: drop-shadow(0 0 22px rgba(250, 204, 21, 0.18));

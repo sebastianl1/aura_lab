@@ -29,9 +29,9 @@ vec3 goldColor(float t, float p) {
 void main() {
   vec2 c = gl_PointCoord - vec2(0.5);
   if (dot(c, c) > 0.25) discard;
-  float edge = smoothstep(0.5, 0.15, length(c));
+  float edge = smoothstep(0.5, 0.40, length(c));
   vec3 col = goldColor(vT, uPalette);
-  gl_FragColor = vec4(col * edge, edge);
+  gl_FragColor = vec4(col, 0.95 * edge);
 }
 `;
 
@@ -40,7 +40,6 @@ attribute float aT;
 uniform float uScale;
 uniform float uPanX;
 uniform float uPanY;
-uniform float uAspect;
 uniform float uPointSize;
 varying float vT;
 void main() {
@@ -48,7 +47,7 @@ void main() {
   vec3 p = position * uScale + vec3(uPanX * 1.8, uPanY * 1.8, 0.0);
   vec4 clip = vec4(p, 1.0);
   gl_Position = clip;
-  gl_PointSize = uPointSize * uScale;
+  gl_PointSize = clamp(uPointSize * uScale, 1.0, 26.0);
 }
 `;
 
@@ -122,8 +121,10 @@ export class PhyllotaxisShader {
     const aT = new Float32Array(n);
     const style = getSpiralStyle(this.styleId);
     const angle = style.logSpiral ? 2 * Math.PI * 0.61803 : (style.angleDeg * Math.PI) / 180;
+    // Normalize so the disc always fills the viewport regardless of n.
+    const maxR = Math.max(1e-6, K0 * Math.sqrt(n));
     for (let i = 0; i < n; i++) {
-      const r = K0 * Math.sqrt(i + 1);
+      const r = (K0 * Math.sqrt(i + 1) * 0.98) / maxR;
       const a = (i + 1) * angle;
       positions[i * 3] = Math.cos(a) * r;
       positions[i * 3 + 1] = Math.sin(a) * r;
@@ -141,11 +142,10 @@ export class PhyllotaxisShader {
       depthWrite: false,
       blending: THREE.AdditiveBlending,
       uniforms: {
-        uScale: { value: 1 },
-        uPanX: { value: 0 },
-        uPanY: { value: 0 },
-        uAspect: { value: 1 },
-        uPointSize: { value: 28 },
+        uScale: { value: this.zoom },
+        uPanX: { value: this.panX },
+        uPanY: { value: this.panY },
+        uPointSize: { value: 7 },
         uPalette: { value: this.palette },
       },
     });
@@ -222,6 +222,7 @@ export class PhyllotaxisShader {
       this.geometry.dispose();
       this.scene?.remove(this.points as THREE.Object3D);
       this.buildGeometry();
+      this.applyUniforms(); // preserve zoom / pan / palette across rebuilds
     } else {
       this.requestCpuRender();
     }
@@ -253,16 +254,13 @@ export class PhyllotaxisShader {
       const w = Math.max(80, rect?.width ?? 400);
       const h = Math.max(120, rect?.height ?? 260);
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      this.canvas.width = Math.floor(w * dpr);
-      this.canvas.height = Math.floor(h * dpr);
       this.canvas.style.width = w + 'px';
       this.canvas.style.height = h + 'px';
+      this.renderer.setPixelRatio(dpr);
       this.renderer.setSize(w, h, false);
       this.camera!.aspect = w / h;
       this.camera!.updateProjectionMatrix();
-      const u = this.material?.uniforms;
-      if (u) u.uAspect!.value = w / h;
-      this.render();
+      this.applyUniforms();
     } else {
       this.requestCpuRender();
     }

@@ -236,6 +236,8 @@ document.addEventListener('DOMContentLoaded', () => {
     inspector.update(n);
     sonifier.setN(n);
     ratioCanvas.setShowPhi(appState.showPhi);
+    const seedsChip = document.getElementById('phyllotaxis-seeds');
+    if (seedsChip) seedsChip.textContent = `N = ${n} semillas`;
 
     if (sonifier.isPlaying) sonifier.setN(n);
     exercisesPanel.updateCurrentNDisplay();

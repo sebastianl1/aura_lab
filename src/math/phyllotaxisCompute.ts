@@ -74,12 +74,14 @@ export function computePhyllotaxis(req: PhyllotaxisComputeRequest): PhyllotaxisC
   const angle = style.logSpiral ? 2 * Math.PI * 0.61803 : (style.angleDeg * Math.PI) / 180;
   const cx = (w2 - 1) / 2 + centerX * (step === 2 ? 0 : 1);
   const cy = (h2 - 1) / 2 + centerY * (step === 2 ? 0 : 1);
-  const scale = zoom * Math.min(h2, w2) * 0.52;
+  // Normalized fit (mirrors the WebGL shader): the disc always fills ~0.46·min.
+  const maxR = Math.max(1e-6, 0.05 * Math.sqrt(n));
+  const scale = (zoom * Math.min(h2, w2) * 0.46) / maxR;
   if (!isFinite(scale) || scale <= 0) {
     return { id: req.id, data, width: w2, height: h2, step };
   }
 
-  const rad = Math.max(1, Math.round(2 + zoom * 6));
+  const rad = Math.max(1, Math.round(1.5 + zoom * 2.5));
   for (let i = 0; i < n; i++) {
     const r0 = k * Math.sqrt(i + 1) * scale;
     const a = (i + 1) * angle;

@@ -71,8 +71,8 @@
         }
       }
     </script>
-    <script type="module" crossorigin src="./assets/index-Bn3XDIRv.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-hDt4ZZD3.css">
+    <script type="module" crossorigin src="./assets/index-BGEHI-cm.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-DeiYwmJe.css">
   </head>
   <body>
     <!-- Ambient background layers (depth 0 → 5) -->
@@ -278,31 +278,7 @@
 
       <!-- Dashboard: angular viewports -->
       <main class="app-container">
-        <section class="canvas-panel" data-sys="SYS·01">
-          <div class="panel-header">
-            <span class="panel-title" data-i18n="panel.sequence"
-              ><span>📈</span> Sucesión de Fibonacci (F(n) en escala log)</span
-            >
-            <span class="panel-sub" data-i18n="panel.sequence.sub"
-              >Cada término crece con la razón φ</span
-            >
-            <div class="panel-actions">
-              <button class="btn btn-export" title="Exportar PNG">📷</button>
-              <button
-                class="btn btn-fullscreen"
-                data-fullscreen="canvas-sequence"
-                title="Pantalla completa"
-              >
-                ⛶
-              </button>
-            </div>
-          </div>
-          <div class="panel-body">
-            <canvas id="canvas-sequence"></canvas>
-          </div>
-        </section>
-
-        <section class="canvas-panel" data-sys="SYS·02">
+<section class="canvas-panel" data-sys="SYS·01">
           <div class="panel-header">
             <span class="panel-title" data-i18n="panel.phyllotaxis"
               ><span>🌻</span> Filotaxis — Ángulo Áureo 137.508°</span
@@ -323,10 +299,11 @@
           </div>
           <div class="panel-body">
             <canvas id="canvas-phyllotaxis"></canvas>
+            <span class="panel-chip" id="phyllotaxis-seeds">N = 233 semillas</span>
           </div>
         </section>
 
-        <section class="canvas-panel" data-sys="SYS·03">
+<section class="canvas-panel" data-sys="SYS·02">
           <div class="panel-header">
             <span class="panel-title" data-i18n="panel.sphere"
               ><span>🧊</span> Esfera de Fibonacci 3D (distribución φ)</span
@@ -350,7 +327,55 @@
           </div>
         </section>
 
-        <section class="canvas-panel" data-sys="SYS·04">
+<section class="canvas-panel" data-sys="SYS·03">
+          <div class="panel-header">
+            <span class="panel-title" data-i18n="panel.sequence"
+              ><span>📈</span> Sucesión de Fibonacci (F(n) en escala log)</span
+            >
+            <span class="panel-sub" data-i18n="panel.sequence.sub"
+              >Cada término crece con la razón φ</span
+            >
+            <div class="panel-actions">
+              <button class="btn btn-export" title="Exportar PNG">📷</button>
+              <button
+                class="btn btn-fullscreen"
+                data-fullscreen="canvas-sequence"
+                title="Pantalla completa"
+              >
+                ⛶
+              </button>
+            </div>
+          </div>
+          <div class="panel-body">
+            <canvas id="canvas-sequence"></canvas>
+          </div>
+        </section>
+
+<section class="canvas-panel" data-sys="SYS·04">
+          <div class="panel-header">
+            <span class="panel-title" data-i18n="panel.goldenrect"
+              ><span>▬</span> Rectángulo Áureo & Teselación 1 : φ</span
+            >
+            <span class="panel-sub" data-i18n="panel.goldenrect.sub"
+              >Muévete por la recursión del rectángulo áureo</span
+            >
+            <div class="panel-actions">
+              <button class="btn btn-export" title="Exportar PNG">📷</button>
+              <button
+                class="btn btn-fullscreen"
+                data-fullscreen="canvas-goldenrect"
+                title="Pantalla completa"
+              >
+                ⛶
+              </button>
+            </div>
+          </div>
+          <div class="panel-body">
+            <canvas id="canvas-goldenrect"></canvas>
+          </div>
+        </section>
+
+<section class="canvas-panel" data-sys="SYS·05">
           <div class="panel-header">
             <span class="panel-title" data-i18n="panel.inspector"
               ><span>📊</span> Inspector Áureo & Métricas de Convergencia</span
@@ -359,31 +384,7 @@
           <div id="inspector-container"></div>
         </section>
 
-        <section class="canvas-panel grid-span-full" data-sys="SYS·05">
-          <div class="panel-header">
-            <span class="panel-title" data-i18n="panel.ratio"
-              ><span>📉</span> Convergencia de la Razón → φ (F(n)/F(n−1))</span
-            >
-            <span class="panel-sub" data-i18n="panel.ratio.sub"
-              >La línea roja marca la asíntota φ = 1.618…</span
-            >
-            <div class="panel-actions">
-              <button class="btn btn-export" title="Exportar PNG">📷</button>
-              <button
-                class="btn btn-fullscreen"
-                data-fullscreen="canvas-ratio"
-                title="Pantalla completa"
-              >
-                ⛶
-              </button>
-            </div>
-          </div>
-          <div class="panel-body">
-            <canvas id="canvas-ratio"></canvas>
-          </div>
-        </section>
-
-        <section class="canvas-panel" data-sys="SYS·06">
+<section class="canvas-panel" data-sys="SYS·06">
           <div class="panel-header">
             <span class="panel-title" data-i18n="panel.pentagram"
               ><span>⭐</span> Pentágono & Pentagrama — Triángulo Áureo 36° / 72°</span
@@ -407,19 +408,19 @@
           </div>
         </section>
 
-        <section class="canvas-panel" data-sys="SYS·07">
+<section class="canvas-panel grid-span-full" data-sys="SYS·07">
           <div class="panel-header">
-            <span class="panel-title" data-i18n="panel.goldenrect"
-              ><span>▬</span> Rectángulo Áureo & Teselación 1 : φ</span
+            <span class="panel-title" data-i18n="panel.ratio"
+              ><span>📉</span> Convergencia de la Razón → φ (F(n)/F(n−1))</span
             >
-            <span class="panel-sub" data-i18n="panel.goldenrect.sub"
-              >Muévete por la recursión del rectángulo áureo</span
+            <span class="panel-sub" data-i18n="panel.ratio.sub"
+              >La línea roja marca la asíntota φ = 1.618…</span
             >
             <div class="panel-actions">
               <button class="btn btn-export" title="Exportar PNG">📷</button>
               <button
                 class="btn btn-fullscreen"
-                data-fullscreen="canvas-goldenrect"
+                data-fullscreen="canvas-ratio"
                 title="Pantalla completa"
               >
                 ⛶
@@ -427,7 +428,7 @@
             </div>
           </div>
           <div class="panel-body">
-            <canvas id="canvas-goldenrect"></canvas>
+            <canvas id="canvas-ratio"></canvas>
           </div>
         </section>
       </main>

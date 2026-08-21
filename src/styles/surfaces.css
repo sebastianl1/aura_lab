@@ -909,12 +909,19 @@ input[type='range']::-moz-range-thumb {
   }
 }
 
-/* Golden girador (φ) hero — centered in its half, air on both sides */
+/* Golden girador (φ) hero.
+   TAMAÑO: edita las dos variables (píxeles fijos = robusto).
+   POSICIÓN dentro de su columna: justify-content de .lab-hero-visual
+   (center | flex-start = a la izquierda | flex-end = a la derecha). */
+:root {
+  --hero-fig-w: 540px;
+  --hero-fig-h: 540px;
+}
 #hero-phi3d {
   flex: 0 0 auto;
-  width: 92%;
-  max-width: 800px;
-  height: 580px;
+  width: var(--hero-fig-w);
+  height: var(--hero-fig-h);
+  max-width: 100%;
   position: relative;
 }
 #hero-phi3d canvas {
@@ -922,9 +929,9 @@ input[type='range']::-moz-range-thumb {
 }
 #hero-spiral {
   flex: 0 0 auto;
-  width: 92%;
-  max-width: 800px;
-  height: 580px;
+  width: var(--hero-fig-w);
+  height: var(--hero-fig-h);
+  max-width: 100%;
   position: relative;
   opacity: 0.75;
   filter: drop-shadow(0 0 22px rgba(250, 204, 21, 0.18));
